@@ -1532,7 +1532,7 @@ input, select, textarea {
 		position: relative;
 		max-width: 100%;
 		z-index: 3;
-        background-image: url('../../images/bg2.jpg');
+        /* background-image: url('../../images/bg2.jpg'); */
 	}
 
 		#main article {
