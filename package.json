@@ -1,15 +1,5 @@
 {
   "devDependencies": {
     "husky": "^8.0.3"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run prod"
-    }
-},
-"scripts": {
-    "prod": "echo \"Add your build command here\"",
-    "postinstall": "node ./node_modules/husky/lib/installer/bin install",
-    "deploy": "git push origin master"
-}
+  }
 }
