@@ -6,10 +6,5 @@
     "hooks": {
       "pre-commit": "npm run prod"
     }
-},
-"scripts": {
-    "prod": "echo \"Add your build command here\"",
-    "postinstall": "node ./node_modules/husky/lib/installer/bin install",
-    "deploy": "git push origin `git subtree split --prefix git subtree add master`:gh-pages --force"
 }
 }
