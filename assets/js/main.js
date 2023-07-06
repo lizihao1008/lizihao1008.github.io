@@ -399,3 +399,31 @@
 					});
 
 })(jQuery);
+
+// function showimg() {
+//     let img = document.getElementById("showimg");
+//     let hidden = img.getAttribute("hidden");
+//     alert(img.style.display);
+//     if (hidden){
+//         img.hidden = 'false'
+//     }
+//     else{
+//         img.hidden = 'true'
+//     }
+//   }
+
+function showimg() {
+    let img = document.getElementById("showimg");
+    let hidden = img.getAttribute("hidden");
+    // alert(img.style.display);
+    if (hidden){
+        img.style.display = "block";
+        img.hidden = 'false'
+    }
+    else{
+    if (img.style.display == "none") {
+        img.style.display = "block";
+    } else {
+        img.style.display = "none";
+    }}
+  }
