@@ -1546,7 +1546,7 @@ input, select, textarea {
 			transition: opacity 0.325s ease-in-out, transform 0.325s ease-in-out;
 			padding: 4.5rem 2.5rem 1.5rem 2.5rem ;
 			position: relative;
-			width: 75rem;
+			width: 45rem;
 			max-width: 100%;
 			background-color: rgba(30, 27, 27, 0.2);
 			border-radius: 4px;
@@ -1678,4 +1678,23 @@ input, select, textarea {
 /* columns */
 .two-columns-grid > * {
     padding:1rem;
+}
+
+/* container */
+.responsive-two-columns {
+    display:flex;
+    flex-wrap:wrap;
+}
+
+/* columns */
+.responsive-two-columns > * {
+    width:100%;
+    padding:1rem;
+}
+
+/* tablet breakpoint */
+@media (min-width:768px) {
+    .responsive-two-columns > * {
+        width:50%;
+    }
 }
