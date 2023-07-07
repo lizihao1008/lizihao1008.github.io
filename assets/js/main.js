@@ -416,6 +416,7 @@ function showimg() {
     let img = document.getElementById("showimg");
     let hidden = img.getAttribute("hidden");
     // alert(img.style.display);
+    // alert(hidden)
     if (hidden){
         img.style.display = "block";
         img.hidden = 'false'
