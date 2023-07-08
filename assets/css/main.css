@@ -119,7 +119,7 @@ input, select, textarea {
 		@media screen and (max-width: 1680px) {
 
 			html {
-				font-size: 12pt;
+				font-size: 12.5pt;
 			}
 
 		}
@@ -127,7 +127,7 @@ input, select, textarea {
 		@media screen and (max-width: 736px) {
 
 			html {
-				font-size: 11pt;
+				font-size: 11.5pt;
 			}
 
 		}
@@ -135,7 +135,7 @@ input, select, textarea {
 		@media screen and (max-width: 360px) {
 
 			html {
-				font-size: 10pt;
+				font-size: 10.5pt;
 			}
 
 		}
@@ -1823,7 +1823,7 @@ input, select, textarea {
     transform: translate(-50%, -50%);
   }
 
-  
+
 /* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_image_overlay_opacity */
   .ImgFade {
     position: relative;
@@ -1852,6 +1852,7 @@ input, select, textarea {
   
   .ImgFade:hover .image {
     opacity: 0.7;
+    transform: scale(1.1);
   }
   
   .ImgFade:hover .middle {
