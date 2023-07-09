@@ -35,11 +35,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> -->
+        <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"> -->
         <script src="https://kit.fontawesome.com/943882cf37.js" crossorigin="anonymous"></script>
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> 
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
@@ -94,10 +95,116 @@
 								<h2 class="major">Research</h2>
 								<!-- <span class="image main"><img src="images/telescope.webp" alt="" /></span> -->
 
-                                <div class="textOnImg">
+                                <!-- <div class="textOnImg">
                                     <img src="images/telescope.webp" alt="" style="width:100%;">
                                     <div class="top-left"><p><a href="https://ui.adsabs.harvard.edu/search/q=orcid%3A0000-0001-5951-459X&sort=date%20desc%2C%20bibcode%20desc&p_=0" target="_blank">View my full publications list in ADS</a> 😀<p></div>
-                                </div> 
+                                </div>  -->
+                                <p><a href="https://ui.adsabs.harvard.edu/search/q=orcid%3A0000-0001-5951-459X&sort=date%20desc%2C%20bibcode%20desc&p_=0" target="_blank">View full publications list in ADS</a> <p></p>
+                                <div id="chart">
+                                </div>
+                                <script>
+                                        var options = {
+    title: {
+    text: 'First-author: 2, Co-author: 6',
+    align: 'left',
+    margin: 10,
+    offsetX: 0,
+    offsetY: 0,
+    floating: false,
+    style: {
+      fontSize:  '14px',
+      fontWeight:  'bold',
+      fontFamily:  undefined,
+      color:  '#ffffff'
+    },
+},
+          series: [{
+          name: 'Refereed',
+          data: [2,19,18]
+        }, {
+          name: 'Non-refereed',
+          data: [0,8,7]
+        }, ],
+          chart: {
+          type: 'bar',
+          height: 350,
+          stacked: true,
+          toolbar: {
+            show: true
+          },
+          zoom: {
+            enabled: false
+          }
+        },
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            legend: {
+              position: 'bottom',
+              offsetX: -10,
+              offsetY: 0
+            }
+          }
+        }],
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            borderRadius: 10,
+            dataLabels: {
+              total: {
+                enabled: true,
+                style: {
+                  fontSize: '13px',
+                  fontWeight: 900,
+                  color: '#ffffff'
+                }
+              }
+            }
+          },
+        },
+        xaxis: {
+        //   type: 'datetime',
+          categories: ['2021','2022','2023'],
+            labels:{
+            style:{
+                fontSize: '12px',
+                colors: ['#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff']
+            }
+        }
+        },
+        yaxis: {
+            labels:{
+            style:{
+                fontSize: '12px',
+                colors: ['#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff']
+            }
+        },
+        title:{
+            text:'Citations',
+            style:{
+                color:'#ffffff'
+            }
+
+        }},
+        legend: {
+          position: 'right',
+          offsetY: 40,
+          labels: {
+          colors: ['#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff','#ffffff'],
+      },
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+      enabled: false,
+    },
+
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+                                </script>
                                 <a href="mammoth.html"><b style="font-size:24px; ">1. Census of Metallicity Gradients in Overdense Environments</b></a>
                                 <!-- <span class="image main"><img src="images/mammoth_fig1.png" alt="" /></span> -->
                                 <p>In this work, we use the HST slitless spectrscopy (grism) to study the member galaxies in an extremely massive protocluster BOSS1244. With the spatially resolved emission maps ([OIII],[OII],Hb,Ha,Hg) obtained by HST grism, we are able to measure the spatial distribution of metallicity based on empirical strong line calibrations. We find a notable fraction of inversed gradients (the relative abundance of oxygen increasing with galactocentric radius) in our sample. We interpret this trend as the effects of enhanced cold mode accretion in protocluster environments, thus stressing the importance of gas accretion in galaxy evolution in protoclusters.</p>
@@ -150,6 +257,8 @@
                                 <li>April, 2023. "Research progress with HST/JWST slitless spectrograph and science preparation for CSST", contributed
                                     talk at China Space Statation Telescope Conference 2023. (Huairou, China)</li>
                                 </ul>
+
+                                
                                 <!-- <iframe src="docs/CV.pdf" width="100%" height="800px"></iframe> -->
 
                                 <!-- <div class="slidesContainer">
@@ -463,7 +572,6 @@
 								</section>
 
 							</article> -->
-                            
 					</div>
 
 				<!-- Footer -->
