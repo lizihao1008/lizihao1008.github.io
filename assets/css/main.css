@@ -1986,3 +1986,11 @@ stroke: #68e397 !important;
 /* .apexcharts-bar-area:hover {
         fill: #FF0099;
       } */
+/* ul.chevron li img{
+    width: 50px;
+} */
+p.school img{
+    width: 20px;
+    display:inline-block;
+    vertical-align:middle;
+}
