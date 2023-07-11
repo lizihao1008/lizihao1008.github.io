@@ -1563,7 +1563,7 @@ input, select, textarea {
 			border-radius: 4px;
 			opacity: 0.5;
             background-size: 100%;
-            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('../../images/bg3.jpg');
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('../../images/bg3_short.jpeg');
             box-shadow: 0px 0px 20px 20px rgb(10, 8, 45);
             /* box-shadow: 0 0 8px 8px rgb(7, 14, 43) inset; */
 		}
@@ -1624,6 +1624,7 @@ input, select, textarea {
                 -webkit-transition: opacity 0.325s ease-in-out, -webkit-transform 0.325s ease-in-out;
                 -ms-transition: opacity 0.325s ease-in-out, -ms-transform 0.325s ease-in-out;
                 transition: opacity 0.325s ease-in-out, transform 0.325s ease-in-out;
+                background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('../../images/bg3_long.jpg');
 			}
 
 				#main article .close:before {
@@ -1644,6 +1645,7 @@ input, select, textarea {
 
 			#main article {
 				padding: 3rem 1.5rem 0.5rem 1.5rem ;
+                background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('../../images/bg3_long.jpg');
 			}
 
 		}
