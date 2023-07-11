@@ -241,8 +241,6 @@
 						<!-- About -->
 							<article id="CV">
 								<h1 class="major">CV</h1>
-                                <p>Download full <a href="https://lizihao1008.github.io/pdf/CV.pdf" target="_blank">CV <i class="fa fa-download" aria-hidden="true"></i>
-                                </a> here.</p>
                                 <p><b>Education</b></p>
 								<!-- <span class="image main"><img src="images/pic03.jpg" alt="" /></span> -->
                                 <p class="school"><img src="images/Tsinghua_Logo.png" alt=""> 2021--, graduate student in Astronomy, Tsinghua University</p>
@@ -262,8 +260,27 @@
                                 
 
                                 
-                                <!-- <iframe src="docs/CV.pdf" width="100%" height="800px"></iframe> -->
-
+                                <!-- <iframe src="pdf/CV.pdf" hidden="hidden" width="100%" height="800px"></iframe> -->
+                                <p>Full CV can be downloaded here: <a href="https://lizihao1008.github.io/pdf/CV.pdf" target="_blank">CV <i class="fa fa-download" aria-hidden="true"></i>
+                                </a> 
+                                <br>
+                                <a class="button small" onclick="toggle(this);">View pdf</a>
+                                <!-- <button onclick="toggle(this);">Show CV</button> -->
+                                <iframe id="myiframe" src="pdf/CV.pdf" hidden="hidden" width="100%" height="800px"></iframe>
+                                <script>
+                                  let toggle = button => {
+                                    let element = document.getElementById("myiframe");
+                                    let hidden = element.getAttribute("hidden");
+                                    
+                                    if (hidden) {
+                                       element.removeAttribute("hidden");
+                                       button.innerText = "Hide pdf";
+                                    } else {
+                                       element.setAttribute("hidden", "hidden");
+                                       button.innerText = "View pdf";
+                                    }
+                                  }
+                                </script>
                                 <!-- <div class="slidesContainer">
 
                                     <div class="mySlides">
@@ -323,7 +340,7 @@
 										<li><input type="reset" value="Reset" /></li>
 									</ul>
 								</form> -->
-                                <img id="showimg" src="images/wechat.jpeg" alt="" hidden="true" width="200" class="center" >
+                                <img id="showimg" src="images/wechat.jpeg" alt="" hidden="hidden" width="200" class="center" >
                                 <br>
                                 <!-- <button onclick="hideDog()">Hide/Show my dog</button> -->
 								<ul class="icons">

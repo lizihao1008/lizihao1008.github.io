@@ -428,7 +428,8 @@ function showimg() {
         img.style.display = "none";
     }}
   }
-  
+
+
   let slideIndex = 1;
 showSlides(slideIndex);
 
