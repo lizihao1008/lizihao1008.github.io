@@ -42,6 +42,7 @@
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> 
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
@@ -83,6 +84,8 @@
 								<span class="image main"><img src="images/profile.jpeg" alt="" /></span>
                                 <!-- <p style="text-align:center;"> <img src="images/profile.jpeg" width="50%"></p> -->
                                 <p>Hello!</p>
+
+                                
                                 <!-- <p>My name is Zihao Li. Li is my family name, which is written <ruby>黎<rt>lí</rt></ruby> in Chinese, not to be confused with <ruby>李<rt>lǐ</rt></ruby>, the latter being much more common in China. </p> -->
 								<p>I'm currently a second year graduate student at Department of Astronomy, Tsinghua University, advised by Prof. Zheng Cai. 
                                     Prior to that, I got my bachelor's degree in Aerospace Engineering at School of Aeronautics and Astronautics, 
@@ -99,8 +102,10 @@
 
 						<!-- Work -->
                                 <article id="Research" style="background-image: none;">
+                                
+								<h2 class="major" style="white-space: pre-line;">Research</h2>
+                                <!-- <button onclick="Citations()">Show List</button> -->
 
-								<h2 class="major">Research</h2>
 								<!-- <span class="image main"><img src="images/telescope.webp" alt="" /></span> -->
 
                                 <!-- <div class="textOnImg">
@@ -109,10 +114,23 @@
                                 </div>  -->
                                 <p><a href="https://ui.adsabs.harvard.edu/search/q=orcid%3A0000-0001-5951-459X&sort=date%20desc%2C%20bibcode%20desc&p_=0" target="_blank">View full publications list in ADS</a> <p></p>
                                 <div id="chart"></div>
+
                                 <script>
+                                    
+                        async function Citations() {
+                                    const response = await fetch("citations.json");
+                                    const citeDict = await response.json();
+                                    const years = citeDict['years'];
+                                    const refereed = citeDict['refereed'];
+                                    const nonrefereed = citeDict['nonrefereed'];
+                                    const first_author = citeDict['first_author'];
+                                    const contributing = citeDict['contributing'];
+                                    const update_time = citeDict['time'];
+                                    let chart_text = `First-author: ${first_author}, Co-author: ${contributing}`;
+
                                         var options = {
     title: {
-    text: 'First-author: 2, Co-author: 6',
+    text: chart_text,
     align: 'left',
     margin: 10,
     offsetX: 0,
@@ -127,10 +145,10 @@
 },
           series: [{
           name: 'Refereed',
-          data: [2,19,20]
+          data: refereed
         }, {
           name: 'Non-refereed',
-          data: [0,10,14]
+          data: nonrefereed
         }, ],
           chart: {
           type: 'bar',
@@ -171,7 +189,7 @@
         },
         xaxis: {
         //   type: 'datetime',
-          categories: ['2021','2022','2023'],
+          categories: years,
             labels:{
             style:{
                 fontSize: '12px',
@@ -211,6 +229,8 @@
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
+    }
+    Citations()
                                 </script>
                                 <a href="mammoth.html"><b style="font-size:24px; ">1. Census of Metallicity Gradients in Overdense Environments</b></a>
                                 <!-- <span class="image main"><img src="images/mammoth_fig1.png" alt="" /></span> -->
