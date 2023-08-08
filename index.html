@@ -120,6 +120,7 @@
                         async function Citations() {
                                     const response = await fetch("citations.json");
                                     const citeDict = await response.json();
+                                    console.log(citeDict)
                                     const years = citeDict['years'];
                                     const refereed = citeDict['refereed'];
                                     const nonrefereed = citeDict['nonrefereed'];
