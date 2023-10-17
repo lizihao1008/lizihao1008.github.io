@@ -18,9 +18,9 @@ class NpEncoder(json.JSONEncoder):
 
 token='lMejssLpFCj1GqoQfnEjE0HIRBnzXetHHCSLwbdY'
 
-encoded_query = urlencode({"q": "orcid_other:0000-0001-5951-459X",
+encoded_query = urlencode({"q": "orcid:0000-0001-5951-459X",
                            "fl": "title, bibcode, author",
-                           "rows": 100
+                           "rows": 200
                           })
 results = requests.get("https://api.adsabs.harvard.edu/v1/search/query?{}".format(encoded_query), \
                        headers={'Authorization': 'Bearer ' + token})

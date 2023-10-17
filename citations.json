@@ -2,7 +2,7 @@
     "refereed to refereed": {
         "2021": 2,
         "2022": 19,
-        "2023": 37
+        "2023": 43
     },
     "refereed to nonrefereed": {
         "2021": 0,
@@ -11,8 +11,8 @@
     },
     "nonrefereed to refereed": {
         "2021": 0,
-        "2022": 2,
-        "2023": 19
+        "2022": 3,
+        "2023": 24
     },
     "nonrefereed to nonrefereed": {
         "2021": 0,
@@ -21,8 +21,8 @@
     },
     "refereed to refereed normalized": {
         "2021": 0.6666666666666666,
-        "2022": 2.68560606060606,
-        "2023": 2.282352887225768
+        "2022": 2.6856060606060606,
+        "2023": 2.6573528872257675
     },
     "refereed to nonrefereed normalized": {
         "2021": 0,
@@ -31,8 +31,8 @@
     },
     "nonrefereed to refereed normalized": {
         "2021": 0,
-        "2022": 0.41666666666666663,
-        "2023": 0.49733564458140733
+        "2022": 0.47916666666666663,
+        "2023": 0.8098356445814077
     },
     "nonrefereed to nonrefereed normalized": {
         "2021": 0,
@@ -42,12 +42,12 @@
     "refereed": [
         2,
         19,
-        37
+        43
     ],
     "nonrefereed": [
         0,
-        2,
-        19
+        3,
+        24
     ],
     "years": [
         "2021",
@@ -55,6 +55,6 @@
         "2023"
     ],
     "first_author": 2,
-    "contributing": 5,
+    "contributing": 6,
     "time": "10/18/2023"
 }
