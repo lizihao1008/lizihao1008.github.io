@@ -6,11 +6,17 @@
 -->
 <html>
 	<head>
-		<title>MAMMOTH</title>
+		<title>disk</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets_massive/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets_massive/css/noscript.css" /></noscript>
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+        </script>
+        <script type="text/javascript"
+        src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        </script>
 	</head>
 	<body class="is-preload">
 
@@ -19,8 +25,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<!-- <a href="index.html" class="logo">RESEARCH</a> -->
-                        <a class="logo">RESEARCH</a>
+						<a class="logo">RESEARCH</a>
 					</header>
 
 				<!-- Nav -->
@@ -28,7 +33,7 @@
 						<ul class="links">
 							<li><a href="index.html">Home</a></li>
                             <li><a href="../#Research">Back</a></li>
-							<li class="active"><a href="tomography.html">Research</a></li>
+							<li class="active"><a href="z8_disk.html">Research</a></li>
 							<!-- <li><a href="elements.html">Elements Reference</a></li> -->
 						</ul>
 						<!-- <ul class="icons">
@@ -46,17 +51,17 @@
 							<section class="post">
 								<header class="major">
 									<!-- <span class="date">April 25, 2017</span> -->
-									<h3>Improved Ly&alpha; Tomography Using Optimized Reconstruction with Constraints on
-                                        Absorption (ORCA)</h3>
-									<p>Li, Horowitz and Cai (2021)</p>
-                                    </p> link to this paper: <a href="https://iopscience.iop.org/article/10.3847/1538-4357/ac044a" target="_blank">https://iopscience.iop.org/article/10.3847/1538-4357/ac044a</a></p>
+									<h3>MAGNIF: A Tentative Lensed Rotating Disk at z=8.34 detected by JWST NIRCam WFSS with Dynamical Forward Modeling </h3>
+									<p>Li, Cai, Sun, et al. (2023) </p>
+                                    <p>link to this paper: <a href="https://ui.adsabs.harvard.edu/abs/2023arXiv231009327L/abstract" target="_blank">https://ui.adsabs.harvard.edu/abs/2023arXiv231009327L/abstract</a></p>
 								</header>
 								<!-- <div class="image main"><img src="images/bg.jpg" alt="" /></div> -->
-                                <span class='image main'> <img src="images/lya_fig4.jpeg" alt="tomography" title="lya tomography"> </span>
-                                <span class='image left'> <img src="images/lya_fig2.png" alt="rec" title="lya tomography"> </span>
-								<p>In this work, we propose a new technique that reconstruct the Large Scale Structure using ly&alpha; forest in multiple sightlines from galaxies or QSOs. Based TensorFlow and able to utilize GPUs, this algorithm is 10-100 times faster than traditional method like Wiener Filter as implemented in <i><a href="https://github.com/caseywstark/dachshund">Dachshund</a></i>. We find the reconstructed error and accuracy of the cosmic web classification are both improved with our algorithm. We apply our algorithm to CLAMATO data and also predict the cosmic web reconstruction ability using next-generation telescopes, e.g., DESI and TMT.</p>
+								<p>We report galaxy MACS0416-Y3 behind the lensing cluster MACSJ0416.1--2403 as a tentative rotating disk at $z=8.34$ detected through its $[OIII]\lambda5007$ emission in JWST NIRCam wide-field slitless spectroscopic observations. The discovery is based on our new grism dynamical modeling methodology for JWST NIRCam slitless spectroscopy, using the data from "Median-band Astrophysics with the Grism of NIRCam in Frontier Fields" (MAGNIF), a JWST Cycle-2 program. The $[OIII]\lambda5007$ emission line morphology in grism data shows velocity offsets compared to the F480M direct imaging, suggestive of rotation. Assuming a geometrically thin disk model, we constrain the rotation velocity of $v_{\rm rot}=58^{+53}_{-35}$ km s$^{-1}$ via forward modeling of the two-dimensional (2D) spectrum. We obtain the kinematic ratio of $v_{\rm rot}/\sigma_v=1.6^{+1.9}_{-0.9}$, where $\sigma_v$ is the velocity dispersion, in line with a quasi-stable thin disk. The resulting dynamical mass is estimated to be $\log(M_{\rm dyn}/M_{\odot})=8.4^{+0.5}_{-0.7}$. If the rotation confirmed, our discovery suggests that rotating gaseous disks may have already existed within 600 million years after Big Bang. </p>
                                 
+                                <span class='image main'> <img src="images/rot_model.png" alt="rotation-model" title="Rotation-model"> </span>
 
+								<!-- <p>TBD.</p>
+                                <span class='image main'> <img src="images/mammoth_fig2.png" alt="zgrad-mass" > </span> -->
 							</section>
 
 					</div>
