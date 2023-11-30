@@ -2,8 +2,8 @@
     "refereed to refereed": {
         "2021": 2,
         "2022": 19,
-        "2023": 43,
-        "2024": 1
+        "2023": 47,
+        "2024": 4
     },
     "refereed to nonrefereed": {
         "2021": 0,
@@ -26,8 +26,8 @@
     "refereed to refereed normalized": {
         "2021": 0.6666666666666666,
         "2022": 2.6856060606060606,
-        "2023": 2.6127100300829103,
-        "2024": 0.0625
+        "2023": 2.710828013794114,
+        "2024": 0.20535714285714285
     },
     "refereed to nonrefereed normalized": {
         "2021": 0,
@@ -38,7 +38,7 @@
     "nonrefereed to refereed normalized": {
         "2021": 0,
         "2022": 0.47916666666666663,
-        "2023": 0.8258768068090104,
+        "2023": 0.8628476043730285,
         "2024": 0
     },
     "nonrefereed to nonrefereed normalized": {
@@ -50,8 +50,8 @@
     "refereed": [
         2,
         19,
-        43,
-        1
+        47,
+        4
     ],
     "nonrefereed": [
         0,
@@ -66,6 +66,6 @@
         "2024"
     ],
     "first_author": 3,
-    "contributing": 6,
-    "time": "10/27/2023"
+    "contributing": 7,
+    "time": "12/01/2023"
 }
