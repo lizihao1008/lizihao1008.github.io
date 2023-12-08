@@ -14,7 +14,7 @@
     "nonrefereed to refereed": {
         "2021": 0,
         "2022": 3,
-        "2023": 25,
+        "2023": 28,
         "2024": 0
     },
     "nonrefereed to nonrefereed": {
@@ -38,7 +38,7 @@
     "nonrefereed to refereed normalized": {
         "2021": 0,
         "2022": 0.47916666666666663,
-        "2023": 0.8628476043730285,
+        "2023": 1.0256300902487345,
         "2024": 0
     },
     "nonrefereed to nonrefereed normalized": {
@@ -56,7 +56,7 @@
     "nonrefereed": [
         0,
         3,
-        25,
+        28,
         0
     ],
     "years": [
@@ -67,5 +67,5 @@
     ],
     "first_author": 3,
     "contributing": 7,
-    "time": "12/01/2023"
+    "time": "12/09/2023"
 }
