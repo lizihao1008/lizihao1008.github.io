@@ -33,6 +33,7 @@ first_author = sum([1 if results['response']['docs'][i]['author'][0] == 'Li, Zih
 contributing = len(results['response']['docs']) - first_author
 
 docs = results['response']['docs']
+
 bibcodes = [docs[i]['bibcode'] for i in range(len(docs))]
 payload = {"bibcodes": bibcodes,
           "types": ["histograms"],
@@ -41,7 +42,9 @@ results = requests.post("https://api.adsabs.harvard.edu/v1/metrics", \
                        headers={'Authorization': 'Bearer ' + token, 
                                 "Content-type": "application/json"}, \
                        data=json.dumps(payload))
+
 results = results.json()
+
 refereed1 = results['histograms']['citations']['refereed to nonrefereed']
 refereed2 = results['histograms']['citations']['refereed to refereed']
 years = list(refereed1.keys())
