@@ -7,8 +7,8 @@
 <style>
     .img-edge-cover {
     width: 180px;
-    height: 180px;
-    position: relative;
+    height: 210px;
+    position: absolute;
 }
 .img-edge-cover:after {
     position: absolute;
@@ -18,14 +18,14 @@
     top: 0;
     left: 0;
     /* box-shadow:0 0 25px 25px rgba(0, 0, 0, 1) inset; */
-    background: radial-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 1));
+    /* background: radial-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 1)); */
     /* mix-blend-mode: screen; */
 }
 .img-edge-cover img{
     width: 180px;
-    height: 180px;
+    height: 210px;
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     z-index: 1;
 }
 
@@ -52,7 +52,7 @@
 			<div id="wrapper">
 				<!-- Header -->
 					<header id="header">
-                        <div class="img-edge-cover"> <img src="images/profile2.jpeg" width="10%"/> </div>
+                        <div class="img-edge-cover"> <img src="images/profile.png" width="10%"/> </div>
 						<div class="content">
 							<div class="inner">
 								<h1>Zihao Li  <img src="images/name.svg", style="vertical-align: text-top; height: 1.1em;"></h1>
@@ -89,12 +89,10 @@
                                 
                                 <!-- <p>My name is Zihao Li. Li is my family name, which is written <ruby>黎<rt>lí</rt></ruby> in Chinese, not to be confused with <ruby>李<rt>lǐ</rt></ruby>, the latter being much more common in China. </p> -->
 								<p>I'm currently a PhD student at Cosmic DAWN Center, Niels Bohr Institute, University of Copenhagen.
-                                I recently received my Master degree at Department of Astronomy, Tsinghua University, advised by Prof. Zheng Cai. 
-                                Prior to that, I got my bachelor's degree in Aerospace Engineering at School of Aeronautics and Astronautics, 
-                                    Sichuan University, with an honor degree in top-notch program. I spent one and half month at UC Berkeley in 
-                                    summer 2019, where I learned my first credit astronomy class. </p>
-                                <p>My current work focuses on understanding galaxy evolution using JWST. I'm actively engaged in data reduction for JWST NIRCam/NIRISS WFSS. I'm now working with Prof. Zheng Cai and Prof. Xin Wang (NAOC) on measuring the metallicity gradient of high redshift galaxies. I'm trying to explore the redshift evolution of metallicity gradients, which can be possibly explained by the combination of gas inflow and outflow at different evolution stage. Beyond that, I'm also searching for the imprints of environmental effects on galaxies' properties through cosmic time, e.g., stellar mass, SFR and chemical abundance. </p>
-                                <p>Perviously, I worked with Dr. Ben Horowitz (Princeton) about reconstructing the large scale structure through Lyman alpha forest. We developed new technique to map the density field of the large scale structure and helps us to study the correlation of galaxies and their environments.</p>
+                                I received my Master degree at Department of Astronomy, Tsinghua University, advised by Prof. Zheng Cai. 
+                                Prior to that, I earned my Bachelor's degree with honors in Aerospace Engineering from the School of Aeronautics and Astronautics at Sichuan University. During undergraduate study, I spent six-week at UC Berkeley in summer 2019 for astronomy program. </p>
+                                <p>My current work focuses on understanding galaxy evolution using JWST. I'm actively engaged in data reduction for JWST NIRCam/NIRISS WFSS. At Cosmic DAWN Center, I'm working with Lise Christensen and Koki Kakichi, focusing on COSMOS-3D survey. At Tsinghua, I was working with Zheng Cai and Xin Wang (NAOC) on measuring the metallicity gradient of high redshift galaxies. I'm trying to explore the redshift evolution of metallicity gradients, which can be possibly explained by the combination of gas inflow and outflow at different evolution stage. Beyond that, I'm also searching for the imprints of environmental effects on galaxies' properties through cosmic time, e.g., stellar mass, SFR and chemical abundance. </p>
+                                <p>Perviously, I worked with Ben Horowitz (Princeton) about reconstructing the large scale structure through Lyman alpha forest. We developed new technique to map the density field of the large scale structure and helps us to study the correlation of galaxies and their environments.</p>
                                 <p>I was born and grown up in ChongQing, a city in the southwest China, famous as the city of mountain and fog. 
                                     I started looking into the sky since I can remember and ever since then, the starry sky has become an indispensible part of my life. 
                                 </p>
@@ -313,6 +311,7 @@
                                 <!-- <span class="image rightnarrow"><img src="images/talk1.jpg" alt="" /></span>
                                 <span class="image rightnarrow"><img src="images/talk2.jpeg" alt="" /></span> -->
                                 <ul>
+                                <li>Aug. 2024. "Insights into cosmic evolution of gas-phase metallicity gradients with JWST", invited talk at Santa Cruz Galaxy Workshop. (Santa Cruz, US)</li>
                                 <li>May, 2023. "The Metal-enrichment of Low Mass Galaxies from cosmic dawn to noon (z~2-7) in the JWST Era", contributed talk at Chinese Astronomical Society Guoshoujing Symposium on Galaxies and Cosmology. (Huangshan, China) </li>
                                 <li>April, 2023. "Research progress with HST/JWST slitless spectrograph and science preparation for CSST", contributed
                                     talk at China Space Statation Telescope Conference 2023. (Huairou, China)</li>
@@ -375,9 +374,7 @@
 						<!-- Contact -->
 							<article id="contact">
 								<h2 class="major">Contact</h2>
-                                <p>Adress: 6th floor, MongManWai Building,
-                                    Tsinghua University,
-                                    Beijing 100084, China 
+                                <p>Adress: Cosmic Dawn Center, Niels Bohr Building, Rådmandsgade 62-64, 2200 Copenhagen N 
                                 </p>
 								<!-- <form method="post" action="#">
 									<div class="fields">
@@ -405,7 +402,7 @@
 								<ul class="icons">
 									<li><a href="https://orcid.org/0000-0001-5951-459X " target="_blank" class="icon brands fa-orcid"><span class="label">ORCID</span></a></li>
 									<li><a href="https://github.com/lizihao1008" target="_blank" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
-                                    <li title="Send me an email!"><a href="mailto:li-zh21@mails.tsinghua.edu.cn" class="icon solid fa-envelope"><span class="label">GitHub</span></a></li>
+                                    <li title="Send me an email!"><a href="mailto:zihao.li@nbi.ku.dk" class="icon solid fa-envelope"><span class="label">GitHub</span></a></li>
                                     <li class="pointer" title="Click to show QR code"><a onclick="showimg()" class="icon brands fa-wechat" ><span class="label">Wechat</span></a></li>
 
 								</ul>
@@ -657,7 +654,7 @@
 				<!-- Footer -->
 					<footer id="footer">
 						<p class="copyright">&copy; Zihao Li. Design: <a href="https://html5up.net">HTML5 UP</a>    
-                            | Contact: <i class="fa fa-envelope-o" aria-hidden="true"></i> li-zh21@mails.tainghua.edu.cn.
+                            | Contact: <i class="fa fa-envelope-o" aria-hidden="true"></i> zihao.li@nbi.ku.dk
                         | Background: MACS J0416 Credits: NASA 
                         <script type="text/javascript" id="mmvst_globe" src="//mapmyvisitors.com/globe.js?d=QC3M8LdCBHXsgbNZGQrccv2nmeNQfzdXQf1Kh3EWKl8"></script>
                     </p>
