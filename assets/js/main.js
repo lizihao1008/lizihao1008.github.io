@@ -28,6 +28,17 @@
 		$window.on('load', function() {
 			window.setTimeout(function() {
 				$body.removeClass('is-preload');
+				
+				// Mark page as ready
+				pageReady = true;
+				
+				// Handle initial hash after preload is complete
+				// Add a small delay to ensure smooth transition
+				setTimeout(function() {
+					if (location.hash != '' && location.hash != '#') {
+						$main._show(location.hash.substr(1), true);
+					}
+				}, 50);
 			}, 100);
 		});
 
@@ -67,7 +78,8 @@
 
 	// Main.
 		var	delay = 325,
-			locked = false;
+			locked = false,
+			pageReady = false;
 
 		// Methods.
 			$main._show = function(id, initial) {
@@ -335,6 +347,11 @@
 
 			$window.on('hashchange', function(event) {
 
+				// Only handle hash changes if page is ready
+				if (!pageReady) {
+					return;
+				}
+
 				// Empty hash?
 					if (location.hash == ''
 					||	location.hash == '#') {
@@ -355,8 +372,10 @@
 							event.preventDefault();
 							event.stopPropagation();
 
-						// Show article.
+						// Show article with a small delay to prevent flashing
+						setTimeout(function() {
 							$main._show(location.hash.substr(1));
+						}, 10);
 
 					}
 
@@ -390,13 +409,6 @@
 			// Hide main, articles.
 				$main.hide();
 				$main_articles.hide();
-
-			// Initial article.
-				if (location.hash != ''
-				&&	location.hash != '#')
-					$window.on('load', function() {
-						$main._show(location.hash.substr(1), true);
-					});
 
 })(jQuery);
 
