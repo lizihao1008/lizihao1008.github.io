@@ -327,7 +327,7 @@
       height = canvas.height = window.innerHeight;
       const mobile = width < 768;
       const reduced = prefersReducedMotion();
-      const count = Math.floor(((width * height) / 3200) * (mobile ? 0.75 : 1));
+      const count = Math.floor(((width * height) / 900) * (mobile ? 0.85 : 1));
 
       stars = Array.from({ length: count }, () => {
         const roll = Math.random();
