@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Fetch ADS citation histograms and publication list.
-Based on ads_metrics.py — writes data/citations.json and data/publications.json.
+Writes data/citations.json and data/publications.json.
 
 Usage:
   export ADS_TOKEN="your-token"
@@ -42,6 +42,25 @@ class NpEncoder(json.JSONEncoder):
 def load_config() -> dict:
     with open(CONFIG_PATH, encoding="utf-8") as f:
         return json.load(f)
+
+
+def author_aliases(config: dict) -> list[str]:
+    primary = config.get("first_author_name", "Li, Zihao")
+    variants = config.get("author_name_variants") or []
+    names = [primary, *variants]
+    seen: set[str] = set()
+    unique: list[str] = []
+    for name in names:
+        key = name.strip().lower()
+        if key and key not in seen:
+            seen.add(key)
+            unique.append(name.strip())
+    return unique
+
+
+def author_matches(candidate: str, aliases: list[str]) -> bool:
+    c = candidate.strip().lower()
+    return any(c == alias.strip().lower() for alias in aliases)
 
 
 def ads_headers(token: str) -> dict:
@@ -93,16 +112,29 @@ def parse_paper(doc: dict) -> dict:
     }
 
 
-def split_publications(docs: list[dict], first_author_name: str) -> tuple[list, list, int, int]:
-    first_author_papers = []
-    second_author_papers = []
+def author_position(authors: list[str], aliases: list[str]) -> int | None:
+    """Return 1-based author position, or None if not in author list."""
+    for i, name in enumerate(authors):
+        if author_matches(name, aliases):
+            return i + 1
+    return None
+
+
+def split_publications(
+    docs: list[dict], aliases: list[str]
+) -> tuple[list[dict], list[dict], int, int]:
+    first_author_papers: list[dict] = []
+    second_author_papers: list[dict] = []
+
     for doc in docs:
         paper = parse_paper(doc)
         authors = paper.get("authors") or []
-        if authors and authors[0] == first_author_name:
+        pos = author_position(authors, aliases)
+        if pos == 1:
             first_author_papers.append(paper)
-        else:
+        elif pos == 2:
             second_author_papers.append(paper)
+
     return (
         first_author_papers,
         second_author_papers,
@@ -133,13 +165,17 @@ def fetch_citation_histogram(bibcodes: list[str], token: str) -> dict:
     return resp.json()["histograms"]["citations"]
 
 
-def build_citations_payload(histogram: dict, first_author: int, contributing: int) -> dict:
+def build_citations_payload(
+    histogram: dict, first_author: int, second_author: int
+) -> dict:
     r1 = histogram.get("refereed to nonrefereed", {})
     r2 = histogram.get("refereed to refereed", {})
     n1 = histogram.get("nonrefereed to nonrefereed", {})
     n2 = histogram.get("nonrefereed to refereed", {})
 
-    years = sorted(set(r1.keys()) | set(r2.keys()) | set(n1.keys()) | set(n2.keys()), key=int)
+    years = sorted(
+        set(r1.keys()) | set(r2.keys()) | set(n1.keys()) | set(n2.keys()), key=int
+    )
 
     def aligned_sum(a: dict, b: dict) -> list:
         return [int(a.get(y, 0)) + int(b.get(y, 0)) for y in years]
@@ -152,36 +188,48 @@ def build_citations_payload(histogram: dict, first_author: int, contributing: in
         "refereed": refereed,
         "nonrefereed": nonrefereed,
         "first_author": first_author,
-        "contributing": contributing,
+        "second_author": second_author,
+        "contributing": second_author,
         "time": datetime.now(timezone.utc).strftime("%m/%d/%Y"),
         "source": "NASA ADS",
     }
 
 
-def main() -> None:
+def resolve_token() -> str | None:
     token = os.environ.get("ADS_TOKEN")
+    if token:
+        return token.strip()
+    token_path = ROOT / "config" / ".ads_token"
+    if token_path.is_file():
+        return token_path.read_text(encoding="utf-8").strip()
+    return None
+
+
+def main() -> None:
+    token = resolve_token()
     if not token:
         print("ADS_TOKEN not set. Skipping fetch.", file=sys.stderr)
-        sys.exit(0)
+        sys.exit(1 if os.environ.get("CI") else 0)
 
     config = load_config()
-    first_author_name = config.get("first_author_name", "Li, Zihao")
+    aliases = author_aliases(config)
 
     print("Fetching papers from ADS…")
     docs = fetch_papers(config, token)
-    first_papers, second_papers, n_first, n_contrib = split_publications(
-        docs, first_author_name
-    )
+    first_papers, second_papers, n_first, n_second = split_publications(docs, aliases)
 
     bibcodes = [d["bibcode"] for d in docs if d.get("bibcode")]
-    print(f"Found {len(docs)} papers ({n_first} first-author, {n_contrib} co-author).")
+    print(
+        f"Found {len(docs)} papers ({n_first} first-author, {n_second} second-author)."
+    )
     print("Fetching citation histogram…")
     histogram = fetch_citation_histogram(bibcodes, token)
-    cite_payload = build_citations_payload(histogram, n_first, n_contrib)
+    cite_payload = build_citations_payload(histogram, n_first, n_second)
 
     updated = datetime.now(timezone.utc).isoformat()
     pub_payload = {
         "updated_at": updated,
+        "source": "NASA ADS",
         "first_author": first_papers,
         "second_author": second_papers,
     }

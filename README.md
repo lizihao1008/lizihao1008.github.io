@@ -64,18 +64,20 @@ python3 -m http.server 8080
 
 4. GitHub Actions 每天 UTC 06:00 运行 `scripts/ads_metrics.py`，更新：
    - `data/citations.json` — ApexCharts 引用图表（years / refereed / nonrefereed / first_author / contributing / time）
-   - `data/publications.json` — 论文列表
+   - `data/publications.json` — 一作 / 二作论文列表（按 ADS 作者顺位筛选）
 
 也可手动触发：**Actions → Update ADS Data → Run workflow**。
 
 本地测试：
 
 ```bash
-cd astronomy-homepage
-export ADS_TOKEN="your-token-here"
+cd my_website
 pip install -r requirements.txt
+export ADS_TOKEN="your-token-here"
 python scripts/ads_metrics.py
 ```
+
+也可将 token 写入 `config/.ads_token`（该文件已在 `.gitignore` 中，不会提交）。
 
 ## 自定义内容
 

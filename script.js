@@ -641,7 +641,7 @@
         refereed: data.refereed,
         nonrefereed: data.nonrefereed || data.years.map(() => 0),
         first_author: data.first_author ?? 0,
-        contributing: data.contributing ?? data.second_author ?? 0,
+        second_author: data.second_author ?? data.contributing ?? 0,
         time: data.time || data.updated_at || "",
       };
     }
@@ -654,7 +654,7 @@
       refereed,
       nonrefereed: years.map(() => 0),
       first_author: data.first_author ?? 0,
-      contributing: data.contributing ?? 0,
+      second_author: data.second_author ?? data.contributing ?? 0,
       time: data.updated_at || data.time || "",
     };
   }
@@ -681,7 +681,7 @@
     const refereed = citeDict.refereed;
     const nonrefereed = citeDict.nonrefereed;
     const firstAuthor = citeDict.first_author;
-    const contributing = citeDict.contributing;
+    const secondAuthor = citeDict.second_author;
     const updateTime = citeDict.time;
     const totalCites = refereed.reduce((a, b) => a + b, 0) + nonrefereed.reduce((a, b) => a + b, 0);
 
@@ -689,7 +689,7 @@
       metaEl.textContent = `Total citations: ${totalCites} · Last updated: ${formatCiteDate(updateTime)}`;
     }
 
-    const chartText = `First-author: ${firstAuthor}, Co-author: ${contributing}`;
+    const chartText = `First-author: ${firstAuthor}, Second-author: ${secondAuthor}`;
     const labelColor = "#aeb7d8";
     const whiteLabels = years.map(() => "#f5f7ff");
 
@@ -790,6 +790,16 @@
     await citationsChart.render();
   }
 
+  function updatePublicationsTimestamp(pubData) {
+    const desc = document.querySelector("#publications .section-desc");
+    if (!desc || !pubData?.updated_at) return;
+    const when = formatCiteDate(pubData.updated_at);
+    const base = "Citation metrics from ";
+    const adsLink =
+      '<a href="https://ui.adsabs.harvard.edu/" target="_blank" rel="noopener noreferrer">NASA ADS</a>';
+    desc.innerHTML = `${base}${adsLink}, updated ${when}.`;
+  }
+
   async function initPublications() {
     try {
       const [pubData, citeData] = await Promise.all([
@@ -799,6 +809,7 @@
 
       renderPublications(pubData.first_author || [], "pub-first-author");
       renderPublications(pubData.second_author || [], "pub-second-author");
+      updatePublicationsTimestamp(pubData);
       await renderCitationsChart(normalizeCitations(citeData));
     } catch (err) {
       console.warn("Using embedded fallback publication data:", err);
@@ -848,7 +859,7 @@
       refereed: [4, 10, 20, 32, 45, 55, 16],
       nonrefereed: [1, 2, 4, 6, 7, 6, 2],
       first_author: 2,
-      contributing: 1,
+      second_author: 1,
       time: new Date().toISOString(),
     };
 
