@@ -1,8 +1,4 @@
-# Astronomy Academic Homepage
-
-个人学术静态主页 — 浪漫主义深空风格，适合天文学博士使用。
-
-**主题：** 在宇宙的寂静中寻找秩序，在星光的余晖里书写科学。
+个人学术静态主页
 
 ## 项目结构
 
@@ -25,9 +21,6 @@ astronomy-homepage/
 ```
 
 ## 本地预览
-
-1. 将 `assets/cv.pdf` 替换为你的简历（当前目录下需自行添加）。
-2. 用浏览器直接打开 `index.html`，或使用本地服务器：
 
 ```bash
 cd astronomy-homepage
