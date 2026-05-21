@@ -20,8 +20,16 @@
 
     const ctx = canvas.getContext("2d");
     let width, height, minDim, animationId;
+    let lastWidth = 0;
+    let lastHeight = 0;
     let galaxies = [];
     let animStart = performance.now();
+
+    /** Decorative spin — keep visible even when OS "reduce motion" is on (slower only). */
+    function galaxyRotSpeed(configSpeed) {
+      const base = configSpeed ?? 0.1;
+      return prefersReducedMotion() ? base * 0.45 : base;
+    }
 
     /** Box–Muller standard normal sample */
     function gaussianRandom() {
@@ -127,7 +135,7 @@
         haloRx: radius * haloScale,
         haloRy: radius * flatten * haloScale,
         rotationOffset: config.rotationOffset ?? Math.random() * Math.PI * 2,
-        rotSpeed: prefersReducedMotion() ? 0 : (config.rotSpeed ?? 0.1),
+        rotSpeed: galaxyRotSpeed(config.rotSpeed),
         nucleusOffset: config.nucleusOffset ?? 0.2,
         parallaxFactor: config.parallaxFactor || 18,
         particles: [...bulge, ...core, ...arms, ...nucleus],
@@ -135,12 +143,19 @@
     }
 
     function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      const nextW = window.innerWidth;
+      const nextH = window.innerHeight;
+      if (nextW === lastWidth && nextH === lastHeight) return;
+      lastWidth = nextW;
+      lastHeight = nextH;
+
+      width = canvas.width = nextW;
+      height = canvas.height = nextH;
       minDim = Math.min(width, height);
       animStart = performance.now();
 
       const density = width < 768 ? 0.55 : 1;
+      const bulgeScale = width < 768 ? 0.55 : 0.72;
       galaxies = [
         buildGalaxy({
           cx: 0.78,
@@ -149,9 +164,9 @@
           count: Math.floor(2000 * density),
           arms: 6,
           armWidth: 0.4,
-          bulgeCount: 2000,
-          coreCount: 1000,
-          rotSpeed: 0.4,
+          bulgeCount: Math.floor(2000 * bulgeScale),
+          coreCount: Math.floor(1000 * bulgeScale),
+          rotSpeed: -0.2,
           tightness: 0.64,
           flatten: 0.6,
           parallaxFactor: 22,
@@ -160,13 +175,13 @@
           cx: 0.18,
           cy: 0.72,
           radius: 0.22,
-          count: Math.floor(1500 * density),
+          count: Math.floor(2000 * density),
           arms: 6,
           armWidth: 0.2,
-          bulgeCount: 1000,
-          coreCount: 300,
-          rotSpeed: -0.01,
-          tightness: 0.6,
+          bulgeCount: Math.floor(1500 * bulgeScale),
+          coreCount: Math.floor(1000 * bulgeScale),
+          rotSpeed: -0.06,
+          tightness: 0.65,
           flatten: 0.75,
           parallaxFactor: 14,
         }),
@@ -177,9 +192,9 @@
           count: Math.floor(1000 * density),
           arms: 4,
           armWidth: 0.25,
-          bulgeCount: 500,
-          coreCount: 200,
-          rotSpeed: 0.12,
+          bulgeCount: Math.floor(500 * bulgeScale),
+          coreCount: Math.floor(200 * bulgeScale),
+          rotSpeed: -0.16,
           tightness: 0.8,
           flatten: 0.4,
           parallaxFactor: 8,
@@ -358,8 +373,10 @@
       });
     }
 
+    const METEOR_SPAWN_CHANCE = 0.008;
+
     function spawnMeteor() {
-      if (Math.random() > 0.0025) return;
+      if (Math.random() > METEOR_SPAWN_CHANCE) return;
 
       const speed = 5 + Math.random() * 9;
       const len = 70 + Math.random() * 120;
