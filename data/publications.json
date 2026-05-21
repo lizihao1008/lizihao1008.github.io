@@ -1,0 +1,47 @@
+{
+  "updated_at": "2026-05-21T00:00:00Z",
+  "first_author": [
+    {
+      "title": "The Assembly of Disk Galaxies at Cosmic Noon",
+      "authors": ["Your Name", "Collaborator, A.", "Collaborator, B."],
+      "year": 2024,
+      "journal": "The Astrophysical Journal",
+      "arxiv_id": "2401.00001",
+      "doi": "10.3847/placeholder",
+      "bibcode": "2024ApJ...000..000Y",
+      "citation_count": 12
+    },
+    {
+      "title": "Star Formation Laws in High-redshift Galaxies",
+      "authors": ["Your Name", "Collaborator, C."],
+      "year": 2023,
+      "journal": "Monthly Notices of the Royal Astronomical Society",
+      "arxiv_id": "2306.00002",
+      "doi": "10.1093/mnras/placeholder",
+      "bibcode": "2023MNRAS.000..000Y",
+      "citation_count": 28
+    }
+  ],
+  "second_author": [
+    {
+      "title": "Cosmic Web Tomography with Deep Imaging Surveys",
+      "authors": ["Lead Author, D.", "Your Name", "Collaborator, E."],
+      "year": 2023,
+      "journal": "Astronomy & Astrophysics",
+      "arxiv_id": "2303.00003",
+      "doi": "10.1051/0004-6361/placeholder",
+      "bibcode": "2023A&A...000..000L",
+      "citation_count": 45
+    },
+    {
+      "title": "Dark Matter Halos and the Emergence of Early Galaxies",
+      "authors": ["Lead Author, F.", "Your Name", "Collaborator, G."],
+      "year": 2022,
+      "journal": "The Astrophysical Journal Letters",
+      "arxiv_id": "2208.00004",
+      "doi": "10.3847/2041-8213/placeholder",
+      "bibcode": "2022ApJ...000L..000L",
+      "citation_count": 67
+    }
+  ]
+}

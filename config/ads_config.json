@@ -1,0 +1,7 @@
+{
+  "orcid": "0000-0001-5951-459X",
+  "author_query": "orcid:0000-0001-5951-459X",
+  "first_author_name": "Li, Zihao",
+  "max_papers": 200,
+  "comment": "Set ADS_TOKEN in GitHub repository secrets. Do not commit tokens to the repo."
+}

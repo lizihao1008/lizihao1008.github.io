@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Personal academic homepage — Astronomy Ph.D. researcher studying the cosmos.">
+  <title>[Zihao Li] · Astronomy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background: galaxies + starfield -->
+  <canvas id="galaxy-field" aria-hidden="true"></canvas>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="nebula nebula-1" aria-hidden="true"></div>
+  <div class="nebula nebula-2" aria-hidden="true"></div>
+  <div class="parallax-layer" id="parallax-dust" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <header class="site-header" id="site-header">
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#home" class="nav-logo" data-scroll>✦</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#home" data-scroll>Home</a></li>
+        <li><a href="#about" data-scroll>About</a></li>
+        <li><a href="#research" data-scroll>Research</a></li>
+        <li><a href="#publications" data-scroll>Publications</a></li>
+        <li><a href="#cv" data-scroll>CV</a></li>
+        <li><a href="#contact" data-scroll>Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section id="home" class="section hero">
+      <div class="hero-orbit" aria-hidden="true">
+        <svg viewBox="0 0 400 400" class="orbit-svg">
+          <ellipse cx="200" cy="200" rx="180" ry="60" fill="none" stroke="url(#orbitGrad)" stroke-width="0.5" opacity="0.4"/>
+          <defs>
+            <linearGradient id="orbitGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#7aa2ff" stop-opacity="0"/>
+              <stop offset="50%" stop-color="#d8b76a" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#b388ff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div class="container hero-content">
+        <p class="hero-tagline fade-in" style="--delay: 0.1s">「Your silence is that of a star」</p>
+        <h1 class="hero-title fade-in" style="--delay: 0.25s">Zihao Li</h1>
+        <p class="hero-subtitle fade-in" style="--delay: 0.4s">Astronomer · Observer of the Cosmos</p>
+        <p class="hero-desc fade-in" style="--delay: 0.55s">
+          I study the origin, structure, and evolution of the Universe.<br>
+        </p>
+        <div class="hero-actions fade-in" style="--delay: 0.7s">
+          <a href="#research" class="btn btn-primary" data-scroll>View Research</a>
+          <a href="assets/cv.pdf" class="btn btn-secondary" download>Download CV</a>
+        </div>
+      </div>
+      <a href="#about" class="scroll-hint" aria-label="Scroll down" data-scroll>
+        <span class="scroll-hint-line"></span>
+      </a>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="section reveal">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label">About</span>
+          <h2 class="section-title">About Me</h2>
+        </header>
+        <div class="about-grid">
+          <div class="about-text">
+            <p class="lead">
+                I'm currently a PhD student at Cosmic DAWN Center, Niels Bohr Institute, University of Copenhagen. I'm actively engaged in data reduction for JWST NIRCam/NIRISS WFSS. At Cosmic DAWN Center, I'm working with Lise Christensen and Koki Kakichi, focusing on COSMOS-3D survey.     
+                I received my Master degree at Department of Astronomy, Tsinghua University, advised by Prof. Zheng Cai. 
+                Prior to that, I earned my Bachelor's degree with honors in Aerospace Engineering from the School of Aeronautics and Astronautics at Sichuan University.
+            </p>
+            <p>
+                I started looking into the sky since I can remember and ever since then, the starry sky has become an indispensible part of my life. I am deeply indebted to everyone who has supported me in my academic career.
+            </p>
+          </div>
+          <aside class="about-meta glass-card">
+            <dl>
+              <div>
+                <dt>Name</dt>
+                <dd>黎子豪/ Zihao Li</dd>
+              </div>
+              <div>
+                <dt>Title</dt>
+                <dd>Ph.D. student in Astronomy </dd>
+              </div>
+              <div>
+                <dt>Affiliation</dt>
+                <dd>Niels Bohr Institute, University of Copenhagen</dd>
+              </div>
+              <div>
+                <dt>Research</dt>
+                <dd>Galaxy formation · High-z galaxies · Reionization · Cosmic Web</dd>
+              </div>
+            </dl>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Research -->
+    <section id="research" class="section reveal">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label">Research</span>
+          <h2 class="section-title">Research Interests</h2>
+        </header>
+        <div class="research-grid">
+          <article class="research-card glass-card">
+            <span class="card-icon" aria-hidden="true">◎</span>
+            <h3>Galaxy Formation and Evolution</h3>
+            <p>How galaxies form, grow, and transform across cosmic time — from primordial seeds to mature stellar systems.</p>
+          </article>
+          <article class="research-card glass-card">
+            <span class="card-icon" aria-hidden="true">✧</span>
+            <h3>High-redshift Universe</h3>
+            <p>Distant galaxies and the first structures in the early Universe, where light still carries the echo of genesis.</p>
+          </article>
+          <article class="research-card glass-card">
+            <span class="card-icon" aria-hidden="true">◈</span>
+            <h3>Cosmological Simulations</h3>
+            <p>Numerical models of dark matter, gas, and galaxies — tracing the invisible architecture that shapes what we observe.</p>
+          </article>
+          <article class="research-card glass-card">
+            <span class="card-icon" aria-hidden="true">◇</span>
+            <h3>Observational Astronomy</h3>
+            <p>Telescope data, spectroscopy, imaging, and multi-wavelength analysis to confront theory with the sky.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Publications -->
+    <section id="publications" class="section reveal">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label">Publications</span>
+          <h2 class="section-title">Publications</h2>
+          <p class="section-desc">Citation metrics from <a href="https://ui.adsabs.harvard.edu/" target="_blank" rel="noopener noreferrer">NASA ADS</a>, updated daily.</p>
+        </header>
+
+        <div class="citations-panel glass-card" id="citations-panel">
+          <div id="chart" class="citations-chart-wrap" role="img" aria-label="Stacked bar chart of citations per year"></div>
+          <p class="citations-meta" id="citations-meta">Loading citation data…</p>
+        </div>
+
+        <div class="pub-columns">
+          <div class="pub-column">
+            <h3 class="pub-heading">First Author</h3>
+            <ul class="pub-list" id="pub-first-author">
+              <li class="pub-loading">Loading publications…</li>
+            </ul>
+          </div>
+          <div class="pub-column">
+            <h3 class="pub-heading">Second Author</h3>
+            <ul class="pub-list" id="pub-second-author">
+              <li class="pub-loading">Loading publications…</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CV -->
+    <section id="cv" class="section reveal">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label">Curriculum Vitae</span>
+          <h2 class="section-title">CV</h2>
+        </header>
+
+        <div class="cv-layout">
+          <div class="timeline">
+            <article class="timeline-item">
+              <span class="timeline-date">2024 — Present</span>
+              <h3>Ph.D. in Astronomy</h3>
+              <p class="timeline-place">University of Copenhagen, Denmark</p>
+            </article>
+            <article class="timeline-item">
+              <span class="timeline-date">2021 — 2024</span>
+              <h3>M.Sc. in Astronomy</h3>
+              <p class="timeline-place">Tsinghua University, China</p>
+            </article>
+            <article class="timeline-item">
+              <span class="timeline-date">2017 — 2021</span>
+              <h3>B.Sc. in Aerospace Engineering</h3>
+              <p class="timeline-place">Sichuan University, China</p>
+            </article>
+          </div>
+
+          <div class="cv-details">
+            <div class="cv-block glass-card">
+              <h3>Awards &amp; Honors</h3>
+              <ul>
+                <li>[Graduate Fellowship / Scholarship Name]</li>
+                <li>[Outstanding Thesis or Research Award]</li>
+                <li>[Conference Travel Grant]</li>
+              </ul>
+            </div>
+            <!-- <div class="cv-block glass-card">
+              <h3>Observing Experience</h3>
+              <ul>
+                <li>[Telescope / Facility Name] — [Instrument], [Year]</li>
+                <li>[Survey or Program Name] — [Role], [Year]</li>
+              </ul>
+            </div> -->
+            <div class="cv-block glass-card">
+              <h3>Technical Skills</h3>
+              <ul class="skills-tags">
+                <li>Python</li>
+                <li>NumPy</li>
+                <li>Astropy</li>
+                <li>LaTeX</li>
+              </ul>
+              <ul class="cv-skills-list">
+                <li>Data Analysis</li>
+                <li>Data Visualization</li>
+                <li>Pipeline Development</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="cv-download-wrap">
+          <a href="assets/cv.pdf" class="btn btn-primary" download>Download Full CV</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section reveal">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label">Contact</span>
+          <h2 class="section-title">Contact</h2>
+        </header>
+        <div class="contact-grid">
+          <div class="contact-info glass-card">
+            <dl>
+              <div>
+                <dt>Email</dt>
+                <dd><a href="mailto:your.email@example.com">zihao.li@nbi.ku.dk</a></dd>
+              </div>
+              <div>
+                <dt>Institution</dt>
+                <dd>Niels Bohr Institute, University of Copenhagen</dd>
+              </div>
+              <div>
+                <dt>Office</dt>
+                <dd>Second floor, NBB</dd>
+              </div>
+            </dl>
+            <ul class="contact-links">
+              <li><a href="https://scholar.google.com/citations?user=OnQczJEAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">Google Scholar</a></li>
+              <li><a href="https://orcid.org/0000-0001-5951-459X" target="_blank" rel="noopener noreferrer">ORCID</a></li>
+              <li><a href="https://github.com/lizihao1008" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+          </div>
+          <blockquote class="contact-quote">
+            <p>For collaborations, conversations, or questions, feel free to reach out.</p>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-theme"></p>
+      <p class="footer-copy">&copy; <span id="year"></span> [Zihao Li]. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.2/dist/apexcharts.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
