@@ -580,6 +580,16 @@
     return res.json();
   }
 
+  const MAX_DISPLAY_AUTHORS = 6;
+
+  function formatAuthors(authors) {
+    const list = authors || [];
+    if (list.length === 0) return "";
+    const shown = list.slice(0, MAX_DISPLAY_AUTHORS);
+    const text = shown.join(", ");
+    return list.length > MAX_DISPLAY_AUTHORS ? `${text}, et al.` : text;
+  }
+
   function renderPublications(papers, containerId) {
     const list = document.getElementById(containerId);
     if (!list) return;
@@ -592,7 +602,7 @@
     list.innerHTML = papers
       .map((p) => {
         const title = p.title || "Untitled";
-        const authors = (p.authors || []).join(", ");
+        const authors = formatAuthors(p.authors);
         const year = p.year || "";
         const journal = p.journal || "";
         const arxiv = p.arxiv_url || (p.arxiv_id ? `https://arxiv.org/abs/${p.arxiv_id}` : null);
