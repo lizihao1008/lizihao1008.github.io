@@ -907,6 +907,43 @@
     resizeTimer = setTimeout(() => initPublications(), 250);
   });
 
+  // ─── CV PDF viewer modal ─────────────────────────────────────────
+  function initCvViewer() {
+    const CV_PDF = "assets/CV.pdf";
+    const modal = document.getElementById("cv-modal");
+    const openBtn = document.getElementById("cv-view-btn");
+    const frame = document.getElementById("cv-pdf-frame");
+    if (!modal || !openBtn || !frame) return;
+
+    let lastFocus = null;
+
+    function openModal() {
+      lastFocus = document.activeElement;
+      frame.src = CV_PDF;
+      modal.hidden = false;
+      modal.classList.add("is-open");
+      document.body.classList.add("cv-modal-open");
+      modal.querySelector(".cv-modal-close")?.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.hidden = true;
+      document.body.classList.remove("cv-modal-open");
+      frame.removeAttribute("src");
+      lastFocus?.focus();
+    }
+
+    openBtn.addEventListener("click", openModal);
+    modal.querySelectorAll("[data-cv-close]").forEach((el) => {
+      el.addEventListener("click", closeModal);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !modal.hidden) closeModal();
+    });
+  }
+
   // ─── Init ───────────────────────────────────────────────────────
   document.addEventListener("DOMContentLoaded", () => {
     initGalaxyField();
@@ -917,5 +954,6 @@
     initReveal();
     initFooter();
     initPublications();
+    initCvViewer();
   });
 })();

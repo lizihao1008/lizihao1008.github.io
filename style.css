@@ -819,7 +819,149 @@ body {
 }
 
 .cv-download-wrap {
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.cv-download-wrap .btn {
+  box-sizing: border-box;
+  min-width: 14rem;
+  min-height: 2.875rem;
+  padding: 0.75rem 1.5rem;
+}
+
+.cv-download-wrap button.btn {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ---- CV PDF modal ---- */
+.cv-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.75rem, 2.5vw, 1.5rem);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s var(--ease), visibility 0.3s;
+}
+
+.cv-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cv-modal[hidden] {
+  display: none;
+}
+
+.cv-modal:not([hidden]) {
+  display: flex;
+}
+
+.cv-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 8, 22, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.cv-modal-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: min(1120px, 96vw);
+  max-height: min(92vh, 920px);
+  padding: 0;
+  overflow: hidden;
+  border-color: rgba(216, 183, 106, 0.35);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.45),
+    0 0 40px rgba(122, 162, 255, 0.12);
+}
+
+.cv-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.cv-modal-header h3 {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.cv-modal-close {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-main);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+}
+
+.cv-modal-close:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.cv-modal-body {
+  flex: 1;
+  min-height: 0;
+  padding: 0.75rem;
+  background: rgba(5, 8, 22, 0.35);
+}
+
+.cv-modal-body iframe {
+  display: block;
+  width: 100%;
+  height: min(100vh, 1024px);
+  min-height: 480px;
+  border: 1px solid var(--glass-border);
+  border-radius: 2px;
+  background: #0b1026;
+}
+
+body.cv-modal-open {
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  .cv-modal {
+    padding: 0.75rem;
+  }
+
+  .cv-modal-panel {
+    max-height: 92vh;
+  }
+
+  .cv-modal-body iframe {
+    height: min(78vh, 680px);
+    min-height: 360px;
+  }
+
+  .cv-download-wrap .btn {
+    min-width: 100%;
+    flex: 1 1 100%;
+  }
 }
 
 /* ---- Contact ---- */
