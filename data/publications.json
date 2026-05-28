@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-27T10:06:11.533724+00:00",
+  "updated_at": "2026-05-28T10:14:32.851164+00:00",
   "source": "NASA ADS",
   "first_author": [
     {
@@ -68,7 +68,7 @@
       "bibcode": "2025ApJS..280...62L",
       "doi": "10.3847/1538-4365/adfa70",
       "arxiv_id": "2506.12129",
-      "citation_count": 21
+      "citation_count": 20
     },
     {
       "title": "MAGNIF: A Tentative Lensed Rotating Disk at $z=8.34$ detected by JWST NIRCam WFSS with Dynamical Forward Modeling",
