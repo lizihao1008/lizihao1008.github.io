@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-29T10:04:36.517671+00:00",
+  "updated_at": "2026-05-30T08:34:36.030477+00:00",
   "source": "NASA ADS",
   "first_author": [
     {
@@ -29,7 +29,7 @@
       "bibcode": "2025A&A...703A.106L",
       "doi": "10.1051/0004-6361/202555372",
       "arxiv_id": "2504.18616",
-      "citation_count": 14
+      "citation_count": 15
     },
     {
       "title": "A 13 Billion Year View of Galaxy Growth: Metallicity Gradient Evolution from the Local Universe to z = 9 with JWST and Archival Surveys",
@@ -68,7 +68,7 @@
       "bibcode": "2025ApJS..280...62L",
       "doi": "10.3847/1538-4365/adfa70",
       "arxiv_id": "2506.12129",
-      "citation_count": 20
+      "citation_count": 21
     },
     {
       "title": "MAGNIF: A Tentative Lensed Rotating Disk at $z=8.34$ detected by JWST NIRCam WFSS with Dynamical Forward Modeling",
@@ -182,7 +182,7 @@
       "bibcode": "2022ApJ...926...70W",
       "doi": "10.3847/1538-4357/ac3974",
       "arxiv_id": "2108.06373",
-      "citation_count": 42
+      "citation_count": 43
     }
   ]
 }
