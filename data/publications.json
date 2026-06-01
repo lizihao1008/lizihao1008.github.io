@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-31T08:54:32.883473+00:00",
+  "updated_at": "2026-06-01T11:47:18.925322+00:00",
   "source": "NASA ADS",
   "first_author": [
     {
@@ -68,7 +68,7 @@
       "bibcode": "2025ApJS..280...62L",
       "doi": "10.3847/1538-4365/adfa70",
       "arxiv_id": "2506.12129",
-      "citation_count": 21
+      "citation_count": 22
     },
     {
       "title": "MAGNIF: A Tentative Lensed Rotating Disk at $z=8.34$ detected by JWST NIRCam WFSS with Dynamical Forward Modeling",
@@ -143,7 +143,7 @@
       "bibcode": "2022ApJ...929L...8L",
       "doi": "10.3847/2041-8213/ac626f",
       "arxiv_id": "2204.03008",
-      "citation_count": 32
+      "citation_count": 33
     },
     {
       "title": "Improved Lyα Tomography Using Optimized Reconstruction with Constraints on Absorption (ORCA)",
@@ -161,6 +161,26 @@
     }
   ],
   "second_author": [
+    {
+      "title": "Revisiting the mass metallicity relation and the fundamental metallicity relation of dwarf galaxies at cosmic noon with NIRISS",
+      "authors": [
+        "He, Xianlong",
+        "Li, Zihao",
+        "Wang, Xin",
+        "Cai, Zheng",
+        "Jones, Tucker",
+        "Treu, Tommaso",
+        "Vulcani, Benedetta",
+        "Malkan, Matthew A.",
+        "Glazebrook, Karl"
+      ],
+      "year": "2026",
+      "journal": "arXiv e-prints",
+      "bibcode": "2026arXiv260520810H",
+      "doi": "10.48550/arXiv.2605.20810",
+      "arxiv_id": "2605.20810",
+      "citation_count": 0
+    },
     {
       "title": "The Mass-Metallicity Relation at Cosmic Noon in Overdense Environments: First Results from the MAMMOTH-Grism HST Slitless Spectroscopic Survey",
       "authors": [
@@ -182,7 +202,7 @@
       "bibcode": "2022ApJ...926...70W",
       "doi": "10.3847/1538-4357/ac3974",
       "arxiv_id": "2108.06373",
-      "citation_count": 43
+      "citation_count": 44
     }
   ]
 }
