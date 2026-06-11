@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-10T10:13:05.172273+00:00",
+  "updated_at": "2026-06-11T10:48:08.566279+00:00",
   "source": "NASA ADS",
   "first_author": [
     {
@@ -68,7 +68,7 @@
       "bibcode": "2025ApJS..280...62L",
       "doi": "10.3847/1538-4365/adfa70",
       "arxiv_id": "2506.12129",
-      "citation_count": 21
+      "citation_count": 22
     },
     {
       "title": "MAGNIF: A Tentative Lensed Rotating Disk at $z=8.34$ detected by JWST NIRCam WFSS with Dynamical Forward Modeling",
@@ -143,7 +143,7 @@
       "bibcode": "2022ApJ...929L...8L",
       "doi": "10.3847/2041-8213/ac626f",
       "arxiv_id": "2204.03008",
-      "citation_count": 32
+      "citation_count": 33
     },
     {
       "title": "Improved Lyα Tomography Using Optimized Reconstruction with Constraints on Absorption (ORCA)",
@@ -202,7 +202,7 @@
       "bibcode": "2022ApJ...926...70W",
       "doi": "10.3847/1538-4357/ac3974",
       "arxiv_id": "2108.06373",
-      "citation_count": 43
+      "citation_count": 44
     }
   ]
 }
