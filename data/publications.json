@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-13T09:24:58.370165+00:00",
+  "updated_at": "2026-06-14T09:45:49.645097+00:00",
   "source": "NASA ADS",
   "first_author": [
     {
@@ -179,7 +179,7 @@
       "bibcode": "2026arXiv260520810H",
       "doi": "10.48550/arXiv.2605.20810",
       "arxiv_id": "2605.20810",
-      "citation_count": 0
+      "citation_count": 1
     },
     {
       "title": "The Mass-Metallicity Relation at Cosmic Noon in Overdense Environments: First Results from the MAMMOTH-Grism HST Slitless Spectroscopic Survey",
