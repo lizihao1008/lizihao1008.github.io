@@ -36,7 +36,16 @@
     let lastWidth = 0;
     let lastHeight = 0;
     let galaxies = [];
+    let flowStreams = [];
+    let flowSprite = null; // baked, blurred gas-cloud sprite (no hard edges)
+    let flowSpriteX = 0; // local offset of sprite top-left from galaxy centre
+    let flowSpriteY = 0;
     let animStart = performance.now();
+
+    /** Slow gas motion (not freeze) when OS "reduce motion" is on. */
+    function flowSpeedScale() {
+      return prefersReducedMotion() ? 0.4 : 1;
+    }
 
     /** Decorative spin — keep visible even when OS "reduce motion" is on (slower only). */
     function galaxyRotSpeed(configSpeed) {
@@ -221,6 +230,9 @@
 
       // Rasterize each galaxy once; the animation loop only blits + rotates.
       galaxies.forEach(bakeGalaxySprite);
+
+      // Circumgalactic gas flows around the bottom-left galaxy.
+      if (galaxies[1]) buildFlows(galaxies[1]);
     }
 
     const colors = {
@@ -304,9 +316,208 @@
       g.spriteHalf = half;
     }
 
+    // ─── Circumgalactic gas flows (accretion / outflow / recycling) ──
+    const flowColors = {
+      accrete: [150, 205, 255], // light blue — inflowing gas
+      outflow: [255, 96, 120], // red — bipolar outflow
+      recycle: [255, 120, 150], // pink-red — recycled gas
+    };
+
+    /** Cubic Bézier point at t. */
+    function bezier(p0, p1, p2, p3, t) {
+      const mt = 1 - t;
+      const a = mt * mt * mt;
+      const b = 3 * mt * mt * t;
+      const c = 3 * mt * t * t;
+      const d = t * t * t;
+      return {
+        x: a * p0.x + b * p1.x + c * p2.x + d * p3.x,
+        y: a * p0.y + b * p1.y + c * p2.y + d * p3.y,
+      };
+    }
+
+    /** Fade particles in/out near the ends of their stream for continuity. */
+    function edgeFade(u) {
+      return Math.max(0, Math.min(1, u / 0.16, (1 - u) / 0.16));
+    }
+
+    /**
+     * Build flow streams around a galaxy, in local px (relative to its
+     * centre). Shapes follow the canonical CGM diagram: blue accretion
+     * spirals in, red outflows shoot out bipolar, red fountains recycle.
+     */
+    function buildFlows(g) {
+      const R = g.radius;
+      const S = (x, y) => ({ x: x * R, y: y * R });
+
+      // Width/alpha profiles along a stream (t: 0 = at galaxy → 1 = far end)
+      const taperMid = (t) => 0.35 + 0.65 * Math.sin(Math.PI * t); // wispy both ends
+      const widenOut = (t) => 0.45 + 1.75 * t; // thin at base, thick far out
+      const fadeOut = (t) => 1 - 0.62 * t; // dimmer with distance
+      const one = () => 1;
+
+      // A cubic-Bézier path helper returning a local(t) function.
+      const bezPath = (a, b, c, d) => {
+        const p0 = S(a[0], a[1]);
+        const p1 = S(b[0], b[1]);
+        const p2 = S(c[0], c[1]);
+        const p3 = S(d[0], d[1]);
+        return (t) => bezier(p0, p1, p2, p3, t);
+      };
+
+      const make = (type, local, baseWidth, widthFn, alphaFn, count, speed) => ({
+        type,
+        local,
+        baseWidth: baseWidth * R,
+        widthFn,
+        alphaFn,
+        particles: Array.from({ length: count }, () => ({
+          o: Math.random(),
+          s: speed * (0.75 + Math.random() * 0.5),
+          size: 0.7 + Math.random() * 1.5,
+          maxA: 0.4 + Math.random() * 0.35,
+        })),
+      });
+
+      // ── Accretion: ONE light-blue stream spiralling in from the right ──
+      // t=0 far out (upper-right) → t=1 at the galaxy, winding ~0.6 turn.
+      const rOut = 1.95, rIn = 0.4, th0 = -0.5, sweep = Math.PI * 1.25;
+      const spiral = (t) => {
+        const rr = (rIn + (rOut - rIn) * Math.pow(1 - t, 1.3)) * R;
+        const th = th0 + sweep * t;
+        return { x: rr * Math.cos(th), y: rr * Math.sin(th) * 0.82 };
+      };
+
+      flowStreams = [
+        make("accrete", spiral, 0.24, (t) => 0.4 + 0.6 * Math.sin(Math.PI * Math.min(t * 1.05, 1)), one, 30, 0.06),
+
+        // ── Outflow: one thick plume up, one down — widen + fade outward ──
+        make("outflow", bezPath([0.0, -0.12], [0.06, -0.7], [-0.06, -1.3], [0.05, -1.95]), 0.3, widenOut, fadeOut, 26, 0.1),
+        make("outflow", bezPath([-0.02, 0.12], [-0.08, 0.7], [0.05, 1.3], [-0.04, 1.95]), 0.3, widenOut, fadeOut, 26, 0.1),
+
+        // ── Recycling: red fountains that arc out and fall back in ──
+        make("recycle", bezPath([-0.05, -0.06], [-1.15, -1.0], [-1.5, -0.05], [-0.45, 0.2]), 0.24, taperMid, one, 20, 0.062),
+        make("recycle", bezPath([0.08, -0.1], [1.05, -1.35], [1.6, -0.35], [0.45, 0.04]), 0.22, taperMid, one, 20, 0.06),
+      ];
+
+      bakeFlowSprite(g);
+    }
+
+    /**
+     * Bake all gas ribbons into ONE blurred offscreen sprite. The cloud is
+     * built from overlapping soft radial blobs along each Bézier, then a
+     * Gaussian blur is applied — so the gas has no hard edges at all.
+     * Only the moving particles are drawn live on top.
+     */
+    function bakeFlowSprite(g) {
+      if (!flowStreams.length) return;
+
+      // Bounding box from sampled curve points + gas half-width margin.
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      let maxW = 0;
+      flowStreams.forEach((s) => {
+        for (let t = 0; t <= 1.0001; t += 0.05) {
+          const pt = s.local(t);
+          const w = s.baseWidth * s.widthFn(t);
+          if (w > maxW) maxW = w;
+          if (pt.x - w < minX) minX = pt.x - w;
+          if (pt.x + w > maxX) maxX = pt.x + w;
+          if (pt.y - w < minY) minY = pt.y - w;
+          if (pt.y + w > maxY) maxY = pt.y + w;
+        }
+      });
+      const blurPx = Math.max(8, g.radius * 0.06);
+      const margin = maxW * 0.8 + blurPx * 2.5;
+      minX -= margin; minY -= margin; maxX += margin; maxY += margin;
+
+      flowSpriteX = minX;
+      flowSpriteY = minY;
+      const w = Math.ceil(maxX - minX);
+      const h = Math.ceil(maxY - minY);
+
+      const off = document.createElement("canvas");
+      off.width = Math.max(1, Math.round(w * dpr));
+      off.height = Math.max(1, Math.round(h * dpr));
+      const octx = off.getContext("2d");
+      octx.scale(dpr, dpr);
+      octx.translate(-minX, -minY); // galaxy centre → local origin
+      octx.filter = `blur(${blurPx}px)`;
+
+      flowStreams.forEach((s) => {
+        const [r, gg, b] = flowColors[s.type];
+        const steps = 34;
+        for (let i = 0; i <= steps; i++) {
+          const t = i / steps;
+          const pt = s.local(t);
+          const rad = Math.max(1, s.baseWidth * s.widthFn(t));
+          const am = s.alphaFn(t); // alpha multiplier along the stream
+          const grad = octx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, rad);
+          grad.addColorStop(0, `rgba(${r}, ${gg}, ${b}, ${0.06 * am})`);
+          grad.addColorStop(0.6, `rgba(${r}, ${gg}, ${b}, ${0.025 * am})`);
+          grad.addColorStop(1, `rgba(${r}, ${gg}, ${b}, 0)`);
+          octx.fillStyle = grad;
+          octx.beginPath();
+          octx.arc(pt.x, pt.y, rad, 0, Math.PI * 2);
+          octx.fill();
+        }
+      });
+      octx.filter = "none";
+
+      flowSprite = off;
+    }
+
+    function drawFlows(g, elapsed) {
+      if (!flowStreams.length) return;
+      const gx = g.cx + cosmosParallax.x * g.parallaxFactor;
+      const gy = g.cy + cosmosParallax.y * g.parallaxFactor;
+      const speed = flowSpeedScale();
+
+      // 1. Blurred, edgeless gas cloud (baked once) blitted around galaxy.
+      if (flowSprite) {
+        ctx.drawImage(
+          flowSprite,
+          gx + flowSpriteX,
+          gy + flowSpriteY,
+          flowSprite.width / dpr,
+          flowSprite.height / dpr
+        );
+      }
+
+      // 2. Live flowing particles, additively blended for a soft glow.
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      flowStreams.forEach((stream) => {
+        const [r, gg, b] = flowColors[stream.type];
+
+        stream.particles.forEach((p) => {
+          const u = (p.o + elapsed * p.s * speed) % 1;
+          const local = stream.local(u);
+          const x = local.x + gx;
+          const y = local.y + gy;
+          const a = edgeFade(u) * p.maxA * stream.alphaFn(u);
+          if (a <= 0.01) return;
+          // Clumps grow with the plume; soft-edged radial gradient, no rim.
+          const sz = p.size * (0.7 + 0.5 * stream.widthFn(u)) * 2.2;
+          const grad = ctx.createRadialGradient(x, y, 0, x, y, sz);
+          grad.addColorStop(0, `rgba(${r}, ${gg}, ${b}, ${a})`);
+          grad.addColorStop(1, `rgba(${r}, ${gg}, ${b}, 0)`);
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(x, y, sz, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      });
+      ctx.restore();
+    }
+
     function draw(now) {
       ctx.clearRect(0, 0, width, height);
       const elapsed = (now - animStart) / 1000;
+
+      // Gas flows render behind the galaxy disk so it stays crisp on top.
+      if (galaxies[1] && galaxies[1].sprite) {
+        drawFlows(galaxies[1], elapsed);
+      }
 
       galaxies.forEach((g) => {
         if (!g.sprite) return;
