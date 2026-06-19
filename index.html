@@ -12,27 +12,39 @@
 </head>
 <body>
   <!-- Background: galaxies + starfield -->
+  <div class="cosmos-base" aria-hidden="true"></div>
   <canvas id="galaxy-field" aria-hidden="true"></canvas>
   <canvas id="starfield" aria-hidden="true"></canvas>
   <div class="nebula nebula-1" aria-hidden="true"></div>
   <div class="nebula nebula-2" aria-hidden="true"></div>
+  <div class="nebula nebula-3" aria-hidden="true"></div>
   <div class="parallax-layer" id="parallax-dust" aria-hidden="true"></div>
+  <div class="cosmic-vignette" aria-hidden="true"></div>
 
   <!-- Navigation -->
   <header class="site-header" id="site-header">
-    <nav class="nav" aria-label="Main navigation">
+    <nav class="nav" data-i18n-attr="aria-label:nav.menu">
       <a href="#home" class="nav-logo" data-scroll>✦</a>
-      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#home" data-scroll data-i18n="nav.home">Home</a></li>
+        <li><a href="#about" data-scroll data-i18n="nav.about">About</a></li>
+        <li><a href="#research" data-scroll data-i18n="nav.research">Research</a></li>
+        <li><a href="#publications" data-scroll data-i18n="nav.publications">Publications</a></li>
+        <li><a href="#cv" data-scroll data-i18n="nav.cv">CV</a></li>
+        <li><a href="#contact" data-scroll data-i18n="nav.contact">Contact</a></li>
+      </ul>
+      <button type="button" class="lang-toggle" id="lang-toggle" aria-label="Switch to Chinese">
+        <svg class="lang-toggle-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <ellipse cx="12" cy="12" rx="4" ry="9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M3 12h18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M4.5 7.5h15M4.5 16.5h15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="lang-toggle-label">中文</span>
+      </button>
+      <button class="nav-toggle" id="nav-toggle" data-i18n-attr="aria-label:nav.toggle" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
-      <ul class="nav-links" id="nav-links">
-        <li><a href="#home" data-scroll>Home</a></li>
-        <li><a href="#about" data-scroll>About</a></li>
-        <li><a href="#research" data-scroll>Research</a></li>
-        <li><a href="#publications" data-scroll>Publications</a></li>
-        <li><a href="#cv" data-scroll>CV</a></li>
-        <li><a href="#contact" data-scroll>Contact</a></li>
-      </ul>
     </nav>
   </header>
 
@@ -41,29 +53,39 @@
     <section id="home" class="section hero">
       <div class="hero-orbit" aria-hidden="true">
         <svg viewBox="0 0 400 400" class="orbit-svg">
-          <ellipse cx="200" cy="200" rx="180" ry="60" fill="none" stroke="url(#orbitGrad)" stroke-width="0.5" opacity="0.4"/>
           <defs>
             <linearGradient id="orbitGrad" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stop-color="#7aa2ff" stop-opacity="0"/>
               <stop offset="50%" stop-color="#d8b76a" stop-opacity="0.6"/>
               <stop offset="100%" stop-color="#b388ff" stop-opacity="0"/>
             </linearGradient>
+            <radialGradient id="planetGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#fff6e2" stop-opacity="1"/>
+              <stop offset="35%" stop-color="#f0d28c" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#d8b76a" stop-opacity="0"/>
+            </radialGradient>
           </defs>
+          <ellipse cx="200" cy="200" rx="180" ry="60" fill="none" stroke="url(#orbitGrad)" stroke-width="0.5" opacity="0.4"/>
+          <ellipse cx="200" cy="200" rx="120" ry="150" fill="none" stroke="url(#orbitGrad)" stroke-width="0.4" opacity="0.22" transform="rotate(28 200 200)"/>
+          <circle r="4" fill="url(#planetGlow)">
+            <animateMotion dur="18s" repeatCount="indefinite" rotate="auto"
+              path="M 20,200 a 180,60 0 1,0 360,0 a 180,60 0 1,0 -360,0"/>
+          </circle>
         </svg>
       </div>
       <div class="container hero-content">
-        <p class="hero-tagline fade-in" style="--delay: 0.1s">「Your silence is that of a star」</p>
+        <p class="hero-tagline fade-in" style="--delay: 0.1s" data-i18n="hero.tagline">「Your silence is that of a star」</p>
         <h1 class="hero-title fade-in" style="--delay: 0.25s">Zihao Li</h1>
-        <p class="hero-subtitle fade-in" style="--delay: 0.4s">Astronomer · Observer of the Cosmos</p>
+        <p class="hero-subtitle fade-in" style="--delay: 0.4s" data-i18n="hero.subtitle">Astronomer · Observer of the Cosmos</p>
         <p class="hero-desc fade-in" style="--delay: 0.55s">
-          I study the origin, structure, and evolution of the Universe.<br>
+          <span data-i18n="hero.desc">I study the origin, structure, and evolution of the Universe.</span><br>
         </p>
         <div class="hero-actions fade-in" style="--delay: 0.7s">
-          <a href="#research" class="btn btn-primary" data-scroll>View Research</a>
-          <a href="https://github.com/lizihao1008/lizihao1008.github.io/blob/dev/assets/CV.pdf" class="btn btn-secondary" download>Download CV</a>
+          <a href="#research" class="btn btn-primary" data-scroll data-i18n="hero.viewResearch">View Research</a>
+          <a href="assets/CV.pdf" class="btn btn-secondary" download data-i18n="hero.downloadCv">Download CV</a>
         </div>
       </div>
-      <a href="#about" class="scroll-hint" aria-label="Scroll down" data-scroll>
+      <a href="#about" class="scroll-hint" data-i18n-attr="aria-label:nav.scrollDown" data-scroll>
         <span class="scroll-hint-line"></span>
       </a>
     </section>
@@ -72,17 +94,17 @@
     <section id="about" class="section reveal">
       <div class="container">
         <header class="section-header">
-          <span class="section-label">About</span>
-          <h2 class="section-title">About Me</h2>
+          <span class="section-label" data-i18n="about.label">About</span>
+          <h2 class="section-title" data-i18n="about.title">About Me</h2>
         </header>
         <div class="about-grid">
           <div class="about-text">
-            <p class="lead">
+            <p class="lead" data-i18n="about.lead">
                 I'm currently a PhD student at Cosmic DAWN Center, Niels Bohr Institute, University of Copenhagen. I'm actively engaged in data reduction for JWST NIRCam/NIRISS WFSS. At Cosmic DAWN Center, I'm working with Lise Christensen and Koki Kakichi, focusing on COSMOS-3D survey.     
                 I received my Master degree at Department of Astronomy, Tsinghua University, advised by Prof. Zheng Cai. 
                 Prior to that, I earned my Bachelor's degree with honors in Aerospace Engineering from the School of Aeronautics and Astronautics at Sichuan University.
             </p>
-            <p>
+            <p data-i18n="about.p2">
                 I started looking into the sky since I can remember and ever since then, the starry sky has become an indispensible part of my life. I am deeply indebted to everyone who has supported me in my academic career.
             </p>
           </div>
@@ -91,7 +113,8 @@
               <div class="about-photo-inner">
                 <img
                   src="assets/photo.jpg"
-                  alt="Portrait"
+                  alt="Portrait of Zihao Li"
+                  data-i18n-attr="alt:about.photoAlt"
                   width="360"
                   height="240"
                   loading="lazy"
@@ -101,20 +124,20 @@
             <aside class="about-meta glass-card">
             <dl>
               <div>
-                <dt>Name</dt>
-                <dd>黎子豪/ Zihao Li</dd>
+                <dt data-i18n="about.name">Name</dt>
+                <dd data-i18n="about.nameVal">黎子豪/ Zihao Li</dd>
               </div>
               <div>
-                <dt>Title</dt>
-                <dd>Ph.D. student in Astronomy </dd>
+                <dt data-i18n="about.role">Title</dt>
+                <dd data-i18n="about.roleVal">Ph.D. student in Astronomy </dd>
               </div>
               <div>
-                <dt>Affiliation</dt>
-                <dd>Niels Bohr Institute, University of Copenhagen</dd>
+                <dt data-i18n="about.affiliation">Affiliation</dt>
+                <dd data-i18n="about.affiliationVal">Niels Bohr Institute, University of Copenhagen</dd>
               </div>
               <div>
-                <dt>Research</dt>
-                <dd>Galaxy formation · High-z galaxies · Reionization · Cosmic Web</dd>
+                <dt data-i18n="about.research">Research</dt>
+                <dd data-i18n="about.researchVal">Galaxy formation · High-z galaxies · Reionization · Cosmic Web</dd>
               </div>
             </dl>
             </aside>
@@ -127,29 +150,29 @@
     <section id="research" class="section reveal">
       <div class="container">
         <header class="section-header">
-          <span class="section-label">Research</span>
-          <h2 class="section-title">Research Interests</h2>
+          <span class="section-label" data-i18n="research.label">Research</span>
+          <h2 class="section-title" data-i18n="research.title">Research Interests</h2>
         </header>
         <div class="research-grid">
           <article class="research-card glass-card">
             <span class="card-icon" aria-hidden="true">◎</span>
-            <h3>Galaxy Formation and Evolution</h3>
-            <p>How galaxies form, grow, and transform across cosmic time — from primordial seeds to mature stellar systems.</p>
+            <h3 data-i18n="research.c1Title">Galaxy Formation and Evolution</h3>
+            <p data-i18n="research.c1Desc">How galaxies form, grow, and transform across cosmic time — from primordial seeds to mature stellar systems.</p>
           </article>
           <article class="research-card glass-card">
             <span class="card-icon" aria-hidden="true">✧</span>
-            <h3>High-redshift Universe</h3>
-            <p>Distant galaxies and the first structures in the early Universe, where light still carries the echo of genesis.</p>
+            <h3 data-i18n="research.c2Title">High-redshift Universe</h3>
+            <p data-i18n="research.c2Desc">Distant galaxies and the first structures in the early Universe, where light still carries the echo of genesis.</p>
           </article>
           <article class="research-card glass-card">
             <span class="card-icon" aria-hidden="true">◈</span>
-            <h3>Cosmological Simulations</h3>
-            <p>Numerical models of dark matter, gas, and galaxies — tracing the invisible architecture that shapes what we observe.</p>
+            <h3 data-i18n="research.c3Title">Cosmological Simulations</h3>
+            <p data-i18n="research.c3Desc">Numerical models of dark matter, gas, and galaxies — tracing the invisible architecture that shapes what we observe.</p>
           </article>
           <article class="research-card glass-card">
             <span class="card-icon" aria-hidden="true">◇</span>
-            <h3>Observational Astronomy</h3>
-            <p>Telescope data, spectroscopy, imaging, and multi-wavelength analysis to confront theory with the sky.</p>
+            <h3 data-i18n="research.c4Title">Observational Astronomy</h3>
+            <p data-i18n="research.c4Desc">Telescope data, spectroscopy, imaging, and multi-wavelength analysis to confront theory with the sky.</p>
           </article>
         </div>
       </div>
@@ -159,27 +182,27 @@
     <section id="publications" class="section reveal">
       <div class="container">
         <header class="section-header">
-          <span class="section-label">Publications</span>
-          <h2 class="section-title">Publications</h2>
-          <p class="section-desc">Citation metrics from <a href="https://ui.adsabs.harvard.edu/" target="_blank" rel="noopener noreferrer">NASA ADS</a>.</p>
+          <span class="section-label" data-i18n="pub.label">Publications</span>
+          <h2 class="section-title" data-i18n="pub.title">Publications</h2>
+          <p class="section-desc" data-i18n-html="pub.desc">Citation metrics from <a href="https://ui.adsabs.harvard.edu/" target="_blank" rel="noopener noreferrer">NASA ADS</a>.</p>
         </header>
 
         <div class="citations-panel glass-card" id="citations-panel">
-          <div id="chart" class="citations-chart-wrap" role="img" aria-label="Stacked bar chart of citations per year"></div>
-          <p class="citations-meta" id="citations-meta">Loading citation data…</p>
+          <div id="chart" class="citations-chart-wrap" role="img" data-i18n-attr="aria-label:pub.chartAria"></div>
+          <p class="citations-meta" id="citations-meta" data-i18n="pub.loadingCitations">Loading citation data…</p>
         </div>
 
         <div class="pub-columns">
           <div class="pub-column">
-            <h3 class="pub-heading">First Author</h3>
+            <h3 class="pub-heading" data-i18n="pub.firstAuthor">First Author</h3>
             <ul class="pub-list" id="pub-first-author">
-              <li class="pub-loading">Loading publications…</li>
+              <li class="pub-loading" data-i18n="pub.loadingPubs">Loading publications…</li>
             </ul>
           </div>
           <div class="pub-column">
-            <h3 class="pub-heading">Second Author</h3>
+            <h3 class="pub-heading" data-i18n="pub.secondAuthor">Second Author</h3>
             <ul class="pub-list" id="pub-second-author">
-              <li class="pub-loading">Loading publications…</li>
+              <li class="pub-loading" data-i18n="pub.loadingPubs">Loading publications…</li>
             </ul>
           </div>
         </div>
@@ -190,35 +213,35 @@
     <section id="cv" class="section reveal">
       <div class="container">
         <header class="section-header">
-          <span class="section-label">Curriculum Vitae</span>
-          <h2 class="section-title">CV</h2>
+          <span class="section-label" data-i18n="cv.label">Curriculum Vitae</span>
+          <h2 class="section-title" data-i18n="cv.title">CV</h2>
         </header>
 
         <div class="cv-layout">
           <div class="timeline">
             <article class="timeline-item">
               <span class="timeline-date">2024 — Present</span>
-              <h3>Ph.D. in Astronomy</h3>
-              <p class="timeline-place">University of Copenhagen, Denmark</p>
+              <h3 data-i18n="cv.phd">Ph.D. in Astronomy</h3>
+              <p class="timeline-place" data-i18n="cv.phdPlace">University of Copenhagen, Denmark</p>
             </article>
             <article class="timeline-item">
               <span class="timeline-date">2021 — 2024</span>
-              <h3>M.Sc. in Astronomy</h3>
-              <p class="timeline-place">Tsinghua University, China</p>
+              <h3 data-i18n="cv.msc">M.Sc. in Astronomy</h3>
+              <p class="timeline-place" data-i18n="cv.mscPlace">Tsinghua University, China</p>
             </article>
             <article class="timeline-item">
               <span class="timeline-date">2017 — 2021</span>
-              <h3>B.Sc. in Aerospace Engineering</h3>
-              <p class="timeline-place">Sichuan University, China</p>
+              <h3 data-i18n="cv.bsc">B.Sc. in Aerospace Engineering</h3>
+              <p class="timeline-place" data-i18n="cv.bscPlace">Sichuan University, China</p>
             </article>
           </div>
 
           <div class="cv-details">
             <div class="cv-block glass-card">
-              <h3>Awards &amp; Honors</h3>
+              <h3 data-i18n="cv.awards">Awards &amp; Honors</h3>
               <ul>
-                <li>Cosmic Dawn Center PhD Fellowship, University of Copenhagen, 2024-2027</li>
-                <li>MITACS Research Fellow, University of Victoria, 2020</li>
+                <li data-i18n="cv.award1">Cosmic Dawn Center PhD Fellowship, University of Copenhagen, 2024-2027</li>
+                <li data-i18n="cv.award2">MITACS Research Fellow, University of Victoria, 2020</li>
               </ul>
             </div>
             <!-- <div class="cv-block glass-card">
@@ -229,7 +252,7 @@
               </ul>
             </div> -->
             <div class="cv-block glass-card">
-              <h3>Technical Skills</h3>
+              <h3 data-i18n="cv.skills">Technical Skills</h3>
               <ul class="skills-tags">
                 <li>Python</li>
                 <li>NumPy</li>
@@ -237,19 +260,19 @@
                 <li>LaTeX</li>
               </ul>
               <ul class="cv-skills-list">
-                <li>Data Analysis</li>
-                <li>Data Visualization</li>
-                <li>Pipeline Development</li>
+                <li data-i18n="cv.skill1">Data Analysis</li>
+                <li data-i18n="cv.skill2">Data Visualization</li>
+                <li data-i18n="cv.skill3">Pipeline Development</li>
               </ul>
             </div>
           </div>
         </div>
 
         <div class="cv-download-wrap">
-          <button type="button" class="btn btn-secondary" id="cv-view-btn" aria-haspopup="dialog" aria-controls="cv-modal">
+          <button type="button" class="btn btn-secondary" id="cv-view-btn" aria-haspopup="dialog" aria-controls="cv-modal" data-i18n="cv.view">
             View Full CV
           </button>
-          <a href="assets/CV.pdf" class="btn btn-primary" download>Download Full CV</a>
+          <a href="assets/CV.pdf" class="btn btn-primary" download data-i18n="cv.download">Download Full CV</a>
         </div>
       </div>
     </section>
@@ -258,23 +281,23 @@
     <section id="contact" class="section reveal">
       <div class="container">
         <header class="section-header">
-          <span class="section-label">Contact</span>
-          <h2 class="section-title">Contact</h2>
+          <span class="section-label" data-i18n="contact.label">Contact</span>
+          <h2 class="section-title" data-i18n="contact.title">Contact</h2>
         </header>
         <div class="contact-grid">
           <div class="contact-info glass-card">
             <dl>
               <div>
-                <dt>Email</dt>
-                <dd><a href="mailto:your.email@example.com">zihao.li@nbi.ku.dk</a></dd>
+                <dt data-i18n="contact.email">Email</dt>
+                <dd><a href="mailto:zihao.li@nbi.ku.dk">zihao.li@nbi.ku.dk</a></dd>
               </div>
               <div>
-                <dt>Institution</dt>
-                <dd>Niels Bohr Institute, University of Copenhagen</dd>
+                <dt data-i18n="contact.institution">Institution</dt>
+                <dd data-i18n="contact.institutionVal">Niels Bohr Institute, University of Copenhagen</dd>
               </div>
               <div>
-                <dt>Office</dt>
-                <dd>Second floor, NBB</dd>
+                <dt data-i18n="contact.office">Office</dt>
+                <dd data-i18n="contact.officeVal">Second floor, NBB</dd>
               </div>
             </dl>
             <ul class="contact-links">
@@ -284,7 +307,7 @@
             </ul>
           </div>
           <blockquote class="contact-quote">
-            <p>For collaborations, conversations, or questions, feel free to reach out.</p>
+            <p data-i18n="contact.quote">For collaborations, conversations, or questions, feel free to reach out.</p>
           </blockquote>
         </div>
       </div>
@@ -294,7 +317,7 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <p class="footer-theme"></p>
-      <p class="footer-copy">&copy; <span id="year"></span> [Zihao Li]. All rights reserved.</p>
+      <p class="footer-copy">&copy; <span id="year"></span> Zihao Li. <span data-i18n="footer.rights">All rights reserved.</span></p>
     </div>
   </footer>
 
@@ -302,8 +325,8 @@
     <div class="cv-modal-backdrop" data-cv-close tabindex="-1" aria-hidden="true"></div>
     <div class="cv-modal-panel glass-card">
       <header class="cv-modal-header">
-        <h3 id="cv-modal-title">Curriculum Vitae</h3>
-        <button type="button" class="cv-modal-close" data-cv-close aria-label="Close CV viewer">×</button>
+        <h3 id="cv-modal-title" data-i18n="cv.modalTitle">Curriculum Vitae</h3>
+        <button type="button" class="cv-modal-close" data-cv-close data-i18n-attr="aria-label:cv.modalClose">×</button>
       </header>
       <div class="cv-modal-body">
         <iframe id="cv-pdf-frame" title="CV PDF preview" loading="lazy"></iframe>
@@ -313,6 +336,7 @@
 
   <script type="text/javascript" id="mapmyvisitors" src="https://mapmyvisitors.com/map.js?cl=ffffff&w=300&t=tt&d=khZ-_Jyi1In_cRFGFzk2S1XSX0HnKqG9S5GJYSQDdzI&co=000000"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.2/dist/apexcharts.min.js"></script>
+  <script src="i18n.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

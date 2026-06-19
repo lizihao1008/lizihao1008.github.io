@@ -10,15 +10,28 @@
   const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   const prefersReducedMotion = () => motionQuery.matches;
 
+  const t = (key, vars) =>
+    (typeof SiteI18n !== "undefined" ? SiteI18n.t(key, vars) : key);
+
+  const dateLocale = () => (SiteI18n?.getLang() === "zh" ? "zh-CN" : "en-US");
+
+  let cachedPubData = null;
+  let cachedCiteDict = null;
+
   /** Shared parallax offset for background layers (-1 … 1) */
   const cosmosParallax = { x: 0, y: 0 };
 
-  // ─── Galaxy particle field ──────────────────────────────────────
+  // ─── Galaxy field (sprite-baked, GPU-blitted) ───────────────────
+  // Each galaxy is a rigid body that only rotates, so we rasterize its
+  // thousands of particles ONCE into an offscreen sprite, then per-frame
+  // simply rotate + drawImage it. This turns ~30k arc() calls per frame
+  // into ~3 drawImage() calls — orders of magnitude faster.
   function initGalaxyField() {
     const canvas = document.getElementById("galaxy-field");
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     let width, height, minDim, animationId;
     let lastWidth = 0;
     let lastHeight = 0;
@@ -149,8 +162,13 @@
       lastWidth = nextW;
       lastHeight = nextH;
 
-      width = canvas.width = nextW;
-      height = canvas.height = nextH;
+      width = nextW;
+      height = nextH;
+      canvas.width = Math.round(nextW * dpr);
+      canvas.height = Math.round(nextH * dpr);
+      canvas.style.width = nextW + "px";
+      canvas.style.height = nextH + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       minDim = Math.min(width, height);
       animStart = performance.now();
 
@@ -200,6 +218,9 @@
           parallaxFactor: 8,
         }),
       ];
+
+      // Rasterize each galaxy once; the animation loop only blits + rotates.
+      galaxies.forEach(bakeGalaxySprite);
     }
 
     const colors = {
@@ -210,74 +231,77 @@
       blue: [122, 162, 255],
     };
 
-    /** Same disk mapping as spiral arms: (r, θ) → flattened ellipse */
-    function diskToWorld(px, py, r, angle, rotation, flatten) {
-      const a = angle + rotation;
-      return {
-        x: px + r * Math.cos(a),
-        y: py + r * Math.sin(a) * flatten,
-      };
-    }
-
-    function drawParticle(p, x, y, alphaMul) {
-      const a = Math.min(1, p.opacity * alphaMul);
-      const [r, g, b] = colors[p.hue] || colors.gold;
-      ctx.beginPath();
-      ctx.arc(x, y, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
-      ctx.fill();
+    /** (r, θ) on a flattened disk → local cartesian (sprite-centred). */
+    function diskToLocal(r, angle, flatten) {
+      return { x: r * Math.cos(angle), y: r * Math.sin(angle) * flatten };
     }
 
     /**
-     * Dark elliptical halo — matches disk via scale(1, ry/rx) + same rotation as arms.
-     * Kept subtle so foreground text stays readable.
+     * Bake a galaxy's halo + bloom + every particle into an offscreen
+     * sprite ONCE. Particles are composited additively ("lighter") so
+     * dense regions glow — the luminous, nebulous core comes for free.
      */
-    function drawEllipticalHalo(g, px, py, rotation) {
+    function bakeGalaxySprite(g) {
+      const half = g.radius * 1.4 + 16; // local radius incl. glow margin
+      const size = Math.ceil(half * 2);
+      const off = document.createElement("canvas");
+      off.width = Math.max(1, Math.round(size * dpr));
+      off.height = Math.max(1, Math.round(size * dpr));
+      const octx = off.getContext("2d");
+      octx.scale(dpr, dpr);
+      octx.translate(half, half);
+
+      // 1. Soft elliptical halo (blue-violet glow aligned with the disk)
       const rx = g.haloRx;
       const ry = g.haloRy;
-      if (rx <= 0 || ry <= 0) return;
+      if (rx > 0 && ry > 0) {
+        octx.save();
+        octx.scale(1, ry / rx);
+        const halo = octx.createRadialGradient(0, 0, 0, 0, 0, rx);
+        halo.addColorStop(0, "rgba(70, 96, 220, 0.42)");
+        halo.addColorStop(0.35, "rgba(48, 64, 168, 0.26)");
+        halo.addColorStop(0.65, "rgba(28, 36, 86, 0.12)");
+        halo.addColorStop(0.88, "rgba(8, 12, 30, 0.04)");
+        halo.addColorStop(1, "rgba(8, 12, 30, 0)");
+        octx.fillStyle = halo;
+        octx.beginPath();
+        octx.arc(0, 0, rx, 0, Math.PI * 2);
+        octx.fill();
+        octx.restore();
+      }
 
-      ctx.save();
-      ctx.translate(px, py);
-      ctx.rotate(rotation);
-      ctx.scale(1, ry / rx);
+      // 2. Warm central bloom — gives the bulge a glowing heart
+      octx.globalCompositeOperation = "lighter";
+      const bloomR = g.radius * 0.78;
+      const bloom = octx.createRadialGradient(0, 0, 0, 0, 0, bloomR);
+      bloom.addColorStop(0, "rgba(255, 240, 208, 0.45)");
+      bloom.addColorStop(0.3, "rgba(255, 214, 150, 0.18)");
+      bloom.addColorStop(0.7, "rgba(216, 150, 90, 0.05)");
+      bloom.addColorStop(1, "rgba(216, 150, 90, 0)");
+      octx.fillStyle = bloom;
+      octx.beginPath();
+      octx.arc(0, 0, bloomR, 0, Math.PI * 2);
+      octx.fill();
 
-      const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
-      grad.addColorStop(0, "rgba(26, 54, 195, 0.5)");
-      grad.addColorStop(0.35, "rgba(36, 57, 147, 0.32)");
-      grad.addColorStop(0.65, "rgba(18, 24, 52, 0.14)");
-      grad.addColorStop(0.88, "rgba(5, 8, 22, 0.05)");
-      grad.addColorStop(1, "rgba(5, 8, 22, 0)");
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(0, 0, rx, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    }
+      // 3. All particles, additively blended (bulge → arms → nucleus)
+      const order = { bulge: 0.85, arm: 1, nucleus: 1 };
+      ["bulge", "arm", "nucleus"].forEach((kind) => {
+        const alphaMul = order[kind];
+        for (const p of g.particles) {
+          if (p.kind !== kind) continue;
+          const { x, y } = diskToLocal(p.baseR, p.angle, g.flatten);
+          const a = Math.min(1, p.opacity * alphaMul);
+          const [r, gg, b] = colors[p.hue] || colors.gold;
+          octx.beginPath();
+          octx.arc(x, y, p.size, 0, Math.PI * 2);
+          octx.fillStyle = `rgba(${r}, ${gg}, ${b}, ${a})`;
+          octx.fill();
+        }
+      });
+      octx.globalCompositeOperation = "source-over";
 
-    function drawDiskParticle(p, px, py, rotation, flatten, alphaMul) {
-      const { x, y } = diskToWorld(px, py, p.baseR, p.angle, rotation, flatten);
-      drawParticle(p, x, y, alphaMul);
-    }
-
-    function drawGalaxy(g, px, py, rotation) {
-      // 1. Dark elliptical halo (aligned with disk)
-      drawEllipticalHalo(g, px, py, rotation);
-
-      // 2. Gaussian bulge + core
-      g.particles
-        .filter((p) => p.kind === "bulge")
-        .forEach((p) => drawDiskParticle(p, px, py, rotation, g.flatten, 0.85));
-
-      // 3. Spiral arms
-      g.particles
-        .filter((p) => p.kind === "arm")
-        .forEach((p) => drawDiskParticle(p, px, py, rotation, g.flatten, 1));
-
-      // 4. Nucleus
-      g.particles
-        .filter((p) => p.kind === "nucleus")
-        .forEach((p) => drawDiskParticle(p, px, py, rotation, g.flatten, 1));
+      g.sprite = off;
+      g.spriteHalf = half;
     }
 
     function draw(now) {
@@ -285,10 +309,16 @@
       const elapsed = (now - animStart) / 1000;
 
       galaxies.forEach((g) => {
+        if (!g.sprite) return;
         const rotation = g.rotationOffset + elapsed * g.rotSpeed;
         const px = g.cx + cosmosParallax.x * g.parallaxFactor;
         const py = g.cy + cosmosParallax.y * g.parallaxFactor;
-        drawGalaxy(g, px, py, rotation);
+        const d = g.spriteHalf * 2;
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(rotation);
+        ctx.drawImage(g.sprite, -g.spriteHalf, -g.spriteHalf, d, d);
+        ctx.restore();
       });
 
       animationId = requestAnimationFrame(draw);
@@ -612,7 +642,7 @@
     if (!list) return;
 
     if (!papers || papers.length === 0) {
-      list.innerHTML = '<li class="pub-empty">No publications listed yet.</li>';
+      list.innerHTML = `<li class="pub-empty">${escapeHtml(t("pub.empty"))}</li>`;
       return;
     }
 
@@ -627,7 +657,10 @@
         const ads = p.bibcode
           ? `https://ui.adsabs.harvard.edu/abs/${p.bibcode}`
           : null;
-        const cites = p.citation_count != null ? `<span class="pub-citations">${p.citation_count} citations</span>` : "";
+        const cites =
+          p.citation_count != null
+            ? `<span class="pub-citations">${escapeHtml(t("pub.citations", { n: p.citation_count }))}</span>`
+            : "";
 
         const links = [
           arxiv ? `<a href="${arxiv}" target="_blank" rel="noopener noreferrer">arXiv</a>` : "",
@@ -691,7 +724,11 @@
     const d = new Date(timeStr);
     return Number.isNaN(d.getTime())
       ? timeStr
-      : d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+      : d.toLocaleDateString(dateLocale(), {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
   }
 
   async function renderCitationsChart(citeDict) {
@@ -700,7 +737,7 @@
     if (!chartEl) return;
 
     if (typeof ApexCharts === "undefined") {
-      if (metaEl) metaEl.textContent = "Chart library failed to load.";
+      if (metaEl) metaEl.textContent = t("pub.chartFail");
       return;
     }
 
@@ -713,10 +750,20 @@
     const totalCites = refereed.reduce((a, b) => a + b, 0) + nonrefereed.reduce((a, b) => a + b, 0);
 
     if (metaEl) {
-      metaEl.textContent = `Total citations: ${totalCites} · Last updated: ${formatCiteDate(updateTime)}`;
+      metaEl.textContent = t("pub.totalCites", {
+        total: totalCites,
+        date: formatCiteDate(updateTime),
+      });
     }
 
-    const chartText = `First-author: ${firstAuthor}, Second-author: ${secondAuthor}`;
+    const chartText = t("pub.chartTitle", {
+      first: firstAuthor,
+      second: secondAuthor,
+    });
+    const chartFont =
+      SiteI18n?.getLang() === "zh"
+        ? '"Helvetica Neue", Helvetica, "PingFang SC", "Microsoft YaHei", sans-serif'
+        : "Inter, sans-serif";
     const labelColor = "#aeb7d8";
     const whiteLabels = years.map(() => "#f5f7ff");
 
@@ -729,12 +776,12 @@
           fontSize: "14px",
           fontWeight: "bold",
           color: "#f5f7ff",
-          fontFamily: "Inter, sans-serif",
+          fontFamily: chartFont,
         },
       },
       series: [
-        { name: "Refereed", data: refereed },
-        { name: "Non-refereed", data: nonrefereed },
+        { name: t("pub.chartRefereed"), data: refereed },
+        { name: t("pub.chartNonRefereed"), data: nonrefereed },
       ],
       chart: {
         type: "bar",
@@ -744,7 +791,7 @@
         foreColor: labelColor,
         toolbar: { show: true, tools: { download: true, selection: false, zoom: false, zoomin: false, zoomout: false, pan: false, reset: false } },
         zoom: { enabled: false },
-        fontFamily: "Inter, sans-serif",
+        fontFamily: chartFont,
       },
       colors: ["#d8b76a", "#7aa2ff"],
       responsive: [
@@ -789,7 +836,7 @@
           style: { fontSize: "12px", colors: [labelColor] },
         },
         title: {
-          text: "Citations",
+          text: t("pub.chartYaxis"),
           style: { color: "#f5f7ff", fontSize: "12px", fontWeight: 600 },
         },
       },
@@ -819,12 +866,14 @@
 
   function updatePublicationsTimestamp(pubData) {
     const desc = document.querySelector("#publications .section-desc");
-    if (!desc || !pubData?.updated_at) return;
-    const when = formatCiteDate(pubData.updated_at);
-    const base = "Citation metrics from ";
-    const adsLink =
-      '<a href="https://ui.adsabs.harvard.edu/" target="_blank" rel="noopener noreferrer">NASA ADS</a>';
-    desc.innerHTML = `${base}${adsLink}, updated ${when}.`;
+    if (!desc) return;
+    if (pubData?.updated_at) {
+      desc.innerHTML = t("pub.descUpdated", {
+        date: formatCiteDate(pubData.updated_at),
+      });
+    } else {
+      desc.innerHTML = t("pub.desc");
+    }
   }
 
   async function initPublications() {
@@ -834,10 +883,12 @@
         loadJSON(`${DATA_BASE}/citations.json`),
       ]);
 
+      cachedPubData = pubData;
+      cachedCiteDict = normalizeCitations(citeData);
       renderPublications(pubData.first_author || [], "pub-first-author");
       renderPublications(pubData.second_author || [], "pub-second-author");
       updatePublicationsTimestamp(pubData);
-      await renderCitationsChart(normalizeCitations(citeData));
+      await renderCitationsChart(cachedCiteDict);
     } catch (err) {
       console.warn("Using embedded fallback publication data:", err);
       await renderFallbackPublications();
@@ -944,8 +995,20 @@
     });
   }
 
+  function refreshDynamicI18n() {
+    if (cachedPubData) {
+      renderPublications(cachedPubData.first_author || [], "pub-first-author");
+      renderPublications(cachedPubData.second_author || [], "pub-second-author");
+      updatePublicationsTimestamp(cachedPubData);
+    }
+    if (cachedCiteDict) renderCitationsChart(cachedCiteDict);
+  }
+
+  window.addEventListener("siteLangChange", refreshDynamicI18n);
+
   // ─── Init ───────────────────────────────────────────────────────
   document.addEventListener("DOMContentLoaded", () => {
+    if (typeof SiteI18n !== "undefined") SiteI18n.initI18n();
     initGalaxyField();
     initStarfield();
     initParallax();
