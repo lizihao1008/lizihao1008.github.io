@@ -559,7 +559,8 @@
 
     const ctx = canvas.getContext("2d");
     let stars = [];
-    let meteors = [];
+    let supernovae = [];
+    let nextNovaAt = 4; // first explosion ~4s after load
     let width, height, animationId;
     let starAnimStart = performance.now();
 
@@ -614,60 +615,206 @@
       });
     }
 
-    const METEOR_SPAWN_CHANCE = 0.008;
+    // ─── Supernovae: a random star explodes, leaving a colourful nebula ──
+    const NOVA_INTERVAL = 20; // seconds between explosions
+    const NOVA_LIFE = 11; // total seconds a remnant lives (≈10s nebula + fade)
+    const novaPalettes = [
+      [[255, 90, 160], [120, 90, 255], [90, 200, 255]], // magenta · violet · cyan
+      [[120, 230, 255], [90, 140, 255], [180, 120, 255]], // cyan · blue · violet
+      [[255, 170, 80], [255, 90, 130], [180, 120, 255]], // amber · rose · violet
+      [[120, 255, 200], [90, 200, 255], [200, 130, 255]], // teal · cyan · lilac
+      [[255, 120, 90], [255, 80, 160], [120, 120, 255]], // coral · pink · indigo
+    ];
 
-    function spawnMeteor() {
-      if (Math.random() > METEOR_SPAWN_CHANCE) return;
-
-      const speed = 5 + Math.random() * 9;
-      const len = 70 + Math.random() * 120;
-      const opacity = 0.45 + Math.random() * 0.45;
-      const fromLeft = Math.random() < 0.35;
-
-      let x, y, vx, vy;
-      if (fromLeft) {
-        x = -30 - Math.random() * 80;
-        y = Math.random() * height * 0.55;
-        const angle = Math.PI / 6 + Math.random() * (Math.PI / 5);
-        vx = Math.cos(angle) * speed;
-        vy = Math.sin(angle) * speed;
-      } else {
-        x = Math.random() * width;
-        y = -30 - Math.random() * 60;
-        const angle = Math.PI / 2 + (Math.random() - 0.5) * (Math.PI / 4);
-        vx = Math.cos(angle) * speed * 0.85;
-        vy = Math.sin(angle) * speed;
-      }
-
-      meteors.push({ x, y, vx, vy, len, opacity });
+    /** Random lumpiness params so each remnant has an irregular outline. */
+    function makeLump() {
+      const tau = Math.PI * 2;
+      return {
+        a1: 0.1 + Math.random() * 0.13, p1: Math.random() * tau,
+        a2: 0.08 + Math.random() * 0.11, p2: Math.random() * tau,
+        a3: 0.05 + Math.random() * 0.08, p3: Math.random() * tau,
+      };
     }
 
-    function drawMeteor(m) {
-      const spd = Math.hypot(m.vx, m.vy) || 1;
-      const tx = m.x - (m.vx / spd) * m.len;
-      const ty = m.y - (m.vy / spd) * m.len;
+    /** Angular radius modulation (1 ± wobble) for non-circular shapes. */
+    function lumpFactor(ang, l) {
+      return (
+        1 +
+        l.a1 * Math.sin(ang * 2 + l.p1) +
+        l.a2 * Math.sin(ang * 3 + l.p2) +
+        l.a3 * Math.sin(ang * 5 + l.p3)
+      );
+    }
 
-      const grad = ctx.createLinearGradient(m.x, m.y, tx, ty);
-      grad.addColorStop(0, `rgba(255, 245, 220, ${m.opacity})`);
-      grad.addColorStop(0.35, `rgba(216, 183, 106, ${m.opacity * 0.65})`);
-      grad.addColorStop(1, "rgba(216, 183, 106, 0)");
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = 1.2;
-      ctx.lineCap = "round";
-      ctx.beginPath();
-      ctx.moveTo(m.x, m.y);
-      ctx.lineTo(tx, ty);
-      ctx.stroke();
+    /**
+     * Pre-render a small, blurred, IRREGULAR HOLLOW nebula shell: coloured
+     * lobes scattered around a ring (hollow centre = cavity) with random
+     * gaps, then feathered to a circle so the sprite has no square edge.
+     * Returns { canvas, half } — half is the sprite's centre offset (px).
+     */
+    function bakeNebula(maxR, palette, lump) {
+      const pad = maxR * 0.6;
+      const half = maxR + pad;
+      const size = Math.ceil(half * 2);
+      const off = document.createElement("canvas");
+      off.width = size;
+      off.height = size;
+      const o = off.getContext("2d");
+      o.translate(half, half);
+      o.filter = `blur(${Math.max(4, maxR * 0.18)}px)`;
 
-      ctx.beginPath();
-      ctx.arc(m.x, m.y, 1.2, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 250, 235, ${m.opacity})`;
-      ctx.fill();
+      // Lobes around a wobbly ring; some skipped → broken, not a full circle.
+      const lobes = 13;
+      for (let i = 0; i < lobes; i++) {
+        if (Math.random() < 0.22) continue;
+        const col = palette[i % palette.length];
+        const baseAng = (i / lobes) * Math.PI * 2;
+        const ang = baseAng + (Math.random() - 0.5) * 0.45;
+        const ringR = maxR * 0.62 * lumpFactor(baseAng, lump) * (0.85 + Math.random() * 0.3);
+        const lx = Math.cos(ang) * ringR;
+        const ly = Math.sin(ang) * ringR;
+        const lr = maxR * (0.2 + Math.random() * 0.26);
+        const a = 0.22 + Math.random() * 0.16;
+        const grad = o.createRadialGradient(lx, ly, 0, lx, ly, lr);
+        grad.addColorStop(0, `rgba(${col[0]}, ${col[1]}, ${col[2]}, ${a})`);
+        grad.addColorStop(0.6, `rgba(${col[0]}, ${col[1]}, ${col[2]}, ${a * 0.4})`);
+        grad.addColorStop(1, `rgba(${col[0]}, ${col[1]}, ${col[2]}, 0)`);
+        o.fillStyle = grad;
+        o.beginPath();
+        o.arc(lx, ly, lr, 0, Math.PI * 2);
+        o.fill();
+      }
+      o.filter = "none";
+
+      // Feather to a circle so no square sprite boundary is ever visible.
+      o.globalCompositeOperation = "destination-in";
+      const maskR = maxR + pad * 0.7;
+      const mask = o.createRadialGradient(0, 0, 0, 0, 0, maskR);
+      mask.addColorStop(0, "rgba(0,0,0,1)");
+      mask.addColorStop(0.78, "rgba(0,0,0,1)");
+      mask.addColorStop(1, "rgba(0,0,0,0)");
+      o.fillStyle = mask;
+      o.beginPath();
+      o.arc(0, 0, maskR, 0, Math.PI * 2);
+      o.fill();
+      o.globalCompositeOperation = "source-over";
+
+      return { canvas: off, half };
+    }
+
+    /** Detonate a random star: flash now, then a fading nebula remnant. */
+    function spawnSupernova(elapsed) {
+      let x = Math.random() * width;
+      let y = Math.random() * height;
+      if (stars.length) {
+        const s = stars[(Math.random() * stars.length) | 0];
+        x = s.x;
+        y = s.y;
+      }
+      const mobile = width < 768;
+      const maxR = (mobile ? 13 : 18) + Math.random() * (mobile ? 9 : 14); // ≈¼ of before
+      const palette = novaPalettes[(Math.random() * novaPalettes.length) | 0];
+      const lump = makeLump();
+      const neb = bakeNebula(maxR, palette, lump);
+      supernovae.push({
+        x,
+        y,
+        start: elapsed,
+        half: neb.half,
+        lump,
+        flashColor: palette[Math.random() < 0.5 ? 2 : 0],
+        sprite: neb.canvas,
+      });
+    }
+
+    /** Nebula opacity: rise (~2s) → hold → fade out by NOVA_LIFE. */
+    function nebulaAlpha(age) {
+      if (age < 0.4) return 0;
+      if (age < 2.0) return (age - 0.4) / 1.6;
+      if (age < 6.0) return 1;
+      if (age < NOVA_LIFE) return 1 - (age - 6.0) / (NOVA_LIFE - 6.0);
+      return 0;
+    }
+
+    function drawSupernova(n, elapsed) {
+      const age = elapsed - n.start;
+      // Continuous outward expansion — the hollow cavity keeps extending.
+      const grow = 0.4 + 1.0 * Math.pow(Math.min(age / NOVA_LIFE, 1), 0.6);
+
+      // 1. Irregular hollow nebula shell (baked sprite; expands, then fades).
+      const na = nebulaAlpha(age);
+      if (na > 0.01) {
+        const r = n.half * grow;
+        ctx.save();
+        ctx.globalAlpha = na;
+        ctx.drawImage(n.sprite, n.x - r, n.y - r, r * 2, r * 2);
+        ctx.restore();
+      }
+
+      // 2. Explosion flash + irregular, broken shockwave (first ~1.5s).
+      if (age < 1.5) {
+        const [fr, fg, fb] = n.flashColor;
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        ctx.lineCap = "round";
+
+        // Bright core flash, fading fast and leaving a cavity behind.
+        const cAlpha = Math.max(0, 1 - age / 0.55);
+        if (cAlpha > 0) {
+          const cr = n.half * (0.15 + 0.5 * Math.min(1, age / 0.22));
+          const cg = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, cr);
+          cg.addColorStop(0, `rgba(255, 255, 250, ${0.9 * cAlpha})`);
+          cg.addColorStop(0.4, `rgba(${fr}, ${fg}, ${fb}, ${0.55 * cAlpha})`);
+          cg.addColorStop(1, `rgba(${fr}, ${fg}, ${fb}, 0)`);
+          ctx.fillStyle = cg;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, cr, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Lumpy, broken shockwave — not a perfect circle.
+        const sp = age / 1.5; // 0 → 1
+        const baseR = n.half * (0.25 + 1.2 * sp);
+        const ringA = Math.max(0, 1 - sp) * 0.75;
+        if (ringA > 0.01) {
+          ctx.strokeStyle = "rgba(255, 250, 240, 1)";
+          ctx.lineWidth = 2.2 * (1 - sp) + 0.5;
+          const N = 46;
+          let prev = null;
+          for (let i = 0; i <= N; i++) {
+            const ang = (i / N) * Math.PI * 2;
+            const rr = baseR * lumpFactor(ang, n.lump);
+            const px = n.x + Math.cos(ang) * rr;
+            const py = n.y + Math.sin(ang) * rr;
+            const vis = 0.5 + 0.5 * Math.sin(ang * 3 + n.lump.p1); // angular gaps
+            if (prev && vis > 0.3) {
+              ctx.globalAlpha = ringA * Math.min(1, vis * 1.3);
+              ctx.beginPath();
+              ctx.moveTo(prev.x, prev.y);
+              ctx.lineTo(px, py);
+              ctx.stroke();
+            }
+            prev = { x: px, y: py };
+          }
+          ctx.globalAlpha = 1;
+        }
+        ctx.restore();
+      }
     }
 
     function draw() {
       ctx.clearRect(0, 0, width, height);
       const elapsed = (performance.now() - starAnimStart) / 1000;
+
+      // Trigger one supernova every NOVA_INTERVAL seconds.
+      if (elapsed >= nextNovaAt) {
+        spawnSupernova(elapsed);
+        nextNovaAt += NOVA_INTERVAL;
+      }
+
+      // Remnants render behind the stars so the field still sparkles in front.
+      supernovae = supernovae.filter((n) => elapsed - n.start < NOVA_LIFE);
+      supernovae.forEach((n) => drawSupernova(n, elapsed));
 
       stars.forEach((s) => {
         const wave = 0.5 + 0.5 * Math.sin(elapsed * s.twinkleSpeed + s.phase);
@@ -687,25 +834,14 @@
         ctx.restore();
       });
 
-      spawnMeteor();
-      meteors = meteors.filter((m) => {
-        m.x += m.vx;
-        m.y += m.vy;
-        drawMeteor(m);
-        return (
-          m.x > -120 &&
-          m.x < width + 120 &&
-          m.y > -120 &&
-          m.y < height + 120
-        );
-      });
-
       animationId = requestAnimationFrame(draw);
     }
 
     function startStarLoop() {
       cancelAnimationFrame(animationId);
       starAnimStart = performance.now();
+      supernovae = [];
+      nextNovaAt = 4;
       animationId = requestAnimationFrame(draw);
     }
 
