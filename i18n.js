@@ -119,7 +119,7 @@
         institution: "Institution",
         institutionVal: "Niels Bohr Institute, University of Copenhagen",
         office: "Office",
-        officeVal: "Second floor, NBB",
+        officeVal: "02.2.I.112, Niels Bohr Building, Copenhagen N",
         quote:
           "For collaborations, conversations, or questions, feel free to reach out.",
       },
@@ -127,8 +127,8 @@
     },
     zh: {
       meta: {
-        title: "黎子豪 · 天文学",
-        description: "个人学术主页 — 天文学博士，研究宇宙的起源、结构与演化。",
+        title: "黎子豪",
+        description: "个人学术主页",
       },
       lang: { toZh: "中文", toEn: "EN" },
       nav: {
@@ -146,7 +146,7 @@
       },
       hero: {
         tagline: "「你的沉默，是星的沉默」",
-        subtitle: "追繁星的孩子",
+        subtitle: "天文学家",
         desc: "我研究宇宙的起源、结构与演化。",
         viewResearch: "研究方向",
         downloadCv: "下载简历",
@@ -232,7 +232,7 @@
         institution: "机构",
         institutionVal: "哥本哈根大学尼尔斯·玻尔研究所",
         office: "办公室",
-        officeVal: "NBB 二楼",
+        officeVal: "02.2.I.112, Niels Bohr Building, Copenhagen N",
         quote: "欢迎合作交流。",
       },
       footer: { rights: "版权所有。" },
