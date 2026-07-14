@@ -4,5 +4,10 @@
   "first_author_name": "Li, Zihao",
   "author_name_variants": ["Li, Z."],
   "max_papers": 200,
+  "others_library_id": "ZuHr_R81QLmYGiJ8B9dfPA",
+  "others_library_url": "https://ui.adsabs.harvard.edu/public-libraries/ZuHr_R81QLmYGiJ8B9dfPA",
+  "extra_public_library_id": "mq516QaIThmD037jiCsULg",
+  "extra_public_library_url": "https://ui.adsabs.harvard.edu/public-libraries/mq516QaIThmD037jiCsULg",
+  "max_library_papers": 200,
   "comment": "Set ADS_TOKEN in GitHub repository secrets. Do not commit tokens to the repo."
 }

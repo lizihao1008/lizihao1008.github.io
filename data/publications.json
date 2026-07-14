@@ -1,7 +1,45 @@
 {
-  "updated_at": "2026-06-21T09:58:12.533208+00:00",
+  "updated_at": "2026-07-14T14:33:10.527195+00:00",
   "source": "NASA ADS",
   "first_author": [
+    {
+      "title": "Possible chemical signatures of first-star enrichment in a very metal-poor galaxy overdensity near the end of reionization",
+      "authors": [
+        "Li, Zihao",
+        "Kakiichi, Koki",
+        "Christensen, Lise",
+        "Cai, Zheng",
+        "D'Odorico, Valentina",
+        "Matthee, Jorryt",
+        "Kashino, Daichi",
+        "Bordoloi, Rongmon",
+        "Mackenzie, Ruari",
+        "Berg, Trystyn A. M.",
+        "Vanni, Irene",
+        "Salvadori, Stefania",
+        "Venditti, Alessandra",
+        "Zhang, Shiwu",
+        "Bosman, Sarah E. I.",
+        "Bañados, Eduardo",
+        "Davies, Frederick B.",
+        "Fan, Xiaohui",
+        "Jun, Hyunsung",
+        "Jin, Xiangyu",
+        "Li, Mingyu",
+        "Rojas-Ruiz, Sofía",
+        "Wang, Feige",
+        "Yang, Jinyi",
+        "Zou, Siwei",
+        "Zhang, Huanian",
+        "Zhu, Yongda"
+      ],
+      "year": "2026",
+      "journal": "arXiv e-prints",
+      "bibcode": "2026arXiv260631638L",
+      "doi": "10.48550/arXiv.2606.31638",
+      "arxiv_id": "2606.31638",
+      "citation_count": 0
+    },
     {
       "title": "Insights on metal enrichment and environmental effects at z ≈ 5─7 with JWST ASPIRE/EIGER and the chemical evolution model",
       "authors": [
@@ -29,7 +67,7 @@
       "bibcode": "2025A&A...703A.106L",
       "doi": "10.1051/0004-6361/202555372",
       "arxiv_id": "2504.18616",
-      "citation_count": 15
+      "citation_count": 16
     },
     {
       "title": "A 13 Billion Year View of Galaxy Growth: Metallicity Gradient Evolution from the Local Universe to z = 9 with JWST and Archival Surveys",
@@ -143,7 +181,7 @@
       "bibcode": "2022ApJ...929L...8L",
       "doi": "10.3847/2041-8213/ac626f",
       "arxiv_id": "2204.03008",
-      "citation_count": 33
+      "citation_count": 34
     },
     {
       "title": "Improved Lyα Tomography Using Optimized Reconstruction with Constraints on Absorption (ORCA)",
@@ -161,26 +199,6 @@
     }
   ],
   "second_author": [
-    {
-      "title": "Revisiting the mass metallicity relation and the fundamental metallicity relation of dwarf galaxies at cosmic noon with NIRISS",
-      "authors": [
-        "He, Xianlong",
-        "Li, Zihao",
-        "Wang, Xin",
-        "Cai, Zheng",
-        "Jones, Tucker",
-        "Treu, Tommaso",
-        "Vulcani, Benedetta",
-        "Malkan, Matthew A.",
-        "Glazebrook, Karl"
-      ],
-      "year": "2026",
-      "journal": "arXiv e-prints",
-      "bibcode": "2026arXiv260520810H",
-      "doi": "10.48550/arXiv.2605.20810",
-      "arxiv_id": "2605.20810",
-      "citation_count": 1
-    },
     {
       "title": "The Mass-Metallicity Relation at Cosmic Noon in Overdense Environments: First Results from the MAMMOTH-Grism HST Slitless Spectroscopic Survey",
       "authors": [
@@ -202,7 +220,29 @@
       "bibcode": "2022ApJ...926...70W",
       "doi": "10.3847/1538-4357/ac3974",
       "arxiv_id": "2108.06373",
-      "citation_count": 44
+      "citation_count": 45
+    },
+    {
+      "title": "Revisiting the mass metallicity relation and the fundamental metallicity relation of dwarf galaxies at cosmic noon with NIRISS",
+      "authors": [
+        "He, Xianlong",
+        "Li, Zihao",
+        "Wang, Xin",
+        "Cai, Zheng",
+        "Jones, Tucker",
+        "Treu, Tommaso",
+        "Vulcani, Benedetta",
+        "Malkan, Matthew A.",
+        "Glazebrook, Karl"
+      ],
+      "year": "2026",
+      "journal": "Monthly Notices of the Royal Astronomical Society",
+      "bibcode": "2026MNRAS.tmp.1157H",
+      "doi": "10.1093/mnras/stag1235",
+      "arxiv_id": "2605.20810",
+      "citation_count": 1
     }
-  ]
+  ],
+  "extra_library_id": "mq516QaIThmD037jiCsULg",
+  "extra_library_url": "https://ui.adsabs.harvard.edu/public-libraries/mq516QaIThmD037jiCsULg"
 }

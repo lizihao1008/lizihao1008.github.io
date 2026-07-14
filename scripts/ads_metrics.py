@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """
-Fetch ADS citation histograms and publication list.
-Writes data/citations.json and data/publications.json.
+Fetch ADS citation histograms and publication lists.
+Writes data/citations.json, data/publications.json, and data/others.json.
+
+- publications.json: ORCID search + optional extra public library (merged into first/second author)
+- others.json: separate curated public library for "Other Selected" on the homepage
 
 Usage:
   export ADS_TOKEN="your-token"
@@ -24,8 +27,10 @@ ROOT = Path(__file__).resolve().parent.parent
 CONFIG_PATH = ROOT / "config" / "ads_config.json"
 CITATIONS_OUT = ROOT / "data" / "citations.json"
 PUBLICATIONS_OUT = ROOT / "data" / "publications.json"
+OTHERS_OUT = ROOT / "data" / "others.json"
 API_SEARCH = "https://api.adsabs.harvard.edu/v1/search/query"
 API_METRICS = "https://api.adsabs.harvard.edu/v1/metrics"
+API_LIBRARY = "https://api.adsabs.harvard.edu/v1/biblib/libraries"
 
 
 class NpEncoder(json.JSONEncoder):
@@ -65,6 +70,45 @@ def author_matches(candidate: str, aliases: list[str]) -> bool:
 
 def ads_headers(token: str) -> dict:
     return {"Authorization": f"Bearer {token}"}
+
+
+def fetch_library_docs(library_id: str, token: str, max_rows: int = 200) -> list[dict]:
+    """Fetch raw ADS Solr docs from a public/private library."""
+    params = {
+        "fl": "title,bibcode,author,year,pub,doi,identifier,pubdate,citation_count",
+        "rows": max_rows,
+        "sort": "date desc",
+    }
+    resp = requests.get(
+        f"{API_LIBRARY}/{library_id}?{urlencode(params)}",
+        headers=ads_headers(token),
+        timeout=90,
+    )
+    resp.raise_for_status()
+    payload = resp.json()
+    docs = payload.get("solr", {}).get("response", {}).get("docs", [])
+    if not docs:
+        docs = [{"bibcode": bc} for bc in payload.get("documents") or []]
+    return docs
+
+
+def fetch_library_papers(library_id: str, token: str, max_rows: int = 200) -> list[dict]:
+    """Fetch parsed papers from an ADS public/private library."""
+    return [parse_paper(doc) for doc in fetch_library_docs(library_id, token, max_rows)]
+
+
+def merge_docs(existing: list[dict], extra: list[dict]) -> list[dict]:
+    """Append library docs not already present (by bibcode)."""
+    seen = {d.get("bibcode") for d in existing if d.get("bibcode")}
+    merged = list(existing)
+    for doc in extra:
+        bibcode = doc.get("bibcode")
+        if bibcode and bibcode in seen:
+            continue
+        merged.append(doc)
+        if bibcode:
+            seen.add(bibcode)
+    return merged
 
 
 def fetch_papers(config: dict, token: str) -> list[dict]:
@@ -216,6 +260,20 @@ def main() -> None:
 
     print("Fetching papers from ADS…")
     docs = fetch_papers(config, token)
+
+    extra_library_id = config.get("extra_public_library_id")
+    extra_library_url = config.get("extra_public_library_url")
+    if extra_library_id:
+        print(f"Merging extra public library {extra_library_id} into publications…")
+        extra_docs = fetch_library_docs(
+            extra_library_id,
+            token,
+            max_rows=config.get("max_library_papers", 200),
+        )
+        before = len(docs)
+        docs = merge_docs(docs, extra_docs)
+        print(f"Added {len(docs) - before} papers from extra library.")
+
     first_papers, second_papers, n_first, n_second = split_publications(docs, aliases)
 
     bibcodes = [d["bibcode"] for d in docs if d.get("bibcode")]
@@ -226,12 +284,33 @@ def main() -> None:
     histogram = fetch_citation_histogram(bibcodes, token)
     cite_payload = build_citations_payload(histogram, n_first, n_second)
 
+    others_library_id = config.get("others_library_id")
+    others_library_url = config.get("others_library_url")
+    other_papers: list[dict] = []
+    if others_library_id:
+        print(f"Fetching others library {others_library_id}…")
+        other_papers = fetch_library_papers(
+            others_library_id,
+            token,
+            max_rows=config.get("max_library_papers", 200),
+        )
+        print(f"Found {len(other_papers)} papers for others.json.")
+
     updated = datetime.now(timezone.utc).isoformat()
     pub_payload = {
         "updated_at": updated,
         "source": "NASA ADS",
         "first_author": first_papers,
         "second_author": second_papers,
+        "extra_library_id": extra_library_id,
+        "extra_library_url": extra_library_url,
+    }
+    others_payload = {
+        "updated_at": updated,
+        "source": "NASA ADS public library",
+        "library_id": others_library_id,
+        "library_url": others_library_url,
+        "papers": other_papers,
     }
 
     CITATIONS_OUT.parent.mkdir(parents=True, exist_ok=True)
@@ -239,9 +318,12 @@ def main() -> None:
         json.dump(cite_payload, f, indent=2, cls=NpEncoder, ensure_ascii=False)
     with open(PUBLICATIONS_OUT, "w", encoding="utf-8") as f:
         json.dump(pub_payload, f, indent=2, ensure_ascii=False)
+    with open(OTHERS_OUT, "w", encoding="utf-8") as f:
+        json.dump(others_payload, f, indent=2, ensure_ascii=False)
 
     print(f"Wrote {CITATIONS_OUT}")
     print(f"Wrote {PUBLICATIONS_OUT}")
+    print(f"Wrote {OTHERS_OUT}")
 
 
 if __name__ == "__main__":

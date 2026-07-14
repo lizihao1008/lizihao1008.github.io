@@ -16,6 +16,7 @@
   const dateLocale = () => (SiteI18n?.getLang() === "zh" ? "zh-CN" : "en-US");
 
   let cachedPubData = null;
+  let cachedOthersData = null;
   let cachedCiteDict = null;
 
   /** Shared parallax offset for background layers (-1 … 1) */
@@ -1223,17 +1224,32 @@
     }
   }
 
+  function renderOtherPublications(othersData) {
+    const section = document.getElementById("pub-other-section");
+    const papers = othersData?.papers || [];
+    if (!section) return;
+    if (papers.length === 0) {
+      section.hidden = true;
+      return;
+    }
+    section.hidden = false;
+    renderPublications(papers, "pub-other-selected");
+  }
+
   async function initPublications() {
     try {
-      const [pubData, citeData] = await Promise.all([
+      const [pubData, citeData, othersData] = await Promise.all([
         loadJSON(`${DATA_BASE}/publications.json`),
         loadJSON(`${DATA_BASE}/citations.json`),
+        loadJSON(`${DATA_BASE}/others.json`).catch(() => ({ papers: [] })),
       ]);
 
       cachedPubData = pubData;
+      cachedOthersData = othersData;
       cachedCiteDict = normalizeCitations(citeData);
       renderPublications(pubData.first_author || [], "pub-first-author");
       renderPublications(pubData.second_author || [], "pub-second-author");
+      renderOtherPublications(othersData);
       updatePublicationsTimestamp(pubData);
       await renderCitationsChart(cachedCiteDict);
     } catch (err) {
@@ -1348,6 +1364,7 @@
       renderPublications(cachedPubData.second_author || [], "pub-second-author");
       updatePublicationsTimestamp(cachedPubData);
     }
+    if (cachedOthersData) renderOtherPublications(cachedOthersData);
     if (cachedCiteDict) renderCitationsChart(cachedCiteDict);
   }
 

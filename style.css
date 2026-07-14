@@ -726,6 +726,12 @@ body {
   gap: 2.5rem;
 }
 
+.pub-other-block {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 .pub-heading {
   font-family: var(--font-serif);
   font-size: 1.2rem;

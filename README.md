@@ -10,8 +10,9 @@ astronomy-homepage/
 ├── config/
 │   └── ads_config.json # ADS API 作者查询配置
 ├── data/
-│   ├── publications.json  # 论文列表（由脚本更新）
-│   └── citations.json     # 每年引用量（由脚本更新）
+│   ├── publications.json  # 一作/二作（ORCID + 额外公共库合并）
+│   ├── citations.json     # 每年引用量（由脚本更新）
+│   └── others.json        # Other Selected 公共库论文
 ├── scripts/
 │   └── ads_metrics.py  # 从 NASA ADS 拉取 citations + publications
 ├── assets/
@@ -57,7 +58,8 @@ python3 -m http.server 8080
 
 4. GitHub Actions 每天 UTC 06:00 运行 `scripts/ads_metrics.py`，更新：
    - `data/citations.json` — ApexCharts 引用图表（years / refereed / nonrefereed / first_author / contributing / time）
-   - `data/publications.json` — 一作 / 二作论文列表（按 ADS 作者顺位筛选）
+   - `data/publications.json` — 一作 / 二作（ORCID 搜索 + [额外公共库](https://ui.adsabs.harvard.edu/public-libraries/mq516QaIThmD037jiCsULg) 合并）
+   - `data/others.json` — [Other Selected 公共库](https://ui.adsabs.harvard.edu/public-libraries/ZuHr_R81QLmYGiJ8B9dfPA) 论文列表
 
 也可手动触发：**Actions → Update ADS Data → Run workflow**。
 
