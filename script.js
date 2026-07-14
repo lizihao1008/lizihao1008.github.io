@@ -1236,16 +1236,26 @@
     renderPublications(papers, "pub-other-selected");
   }
 
-  async function initPublications() {
+  async function loadOthersData() {
     try {
-      const [pubData, citeData, othersData] = await Promise.all([
+      return await loadJSON(`${DATA_BASE}/others.json`);
+    } catch (err) {
+      console.warn("Failed to load others.json:", err);
+      return { papers: [] };
+    }
+  }
+
+  async function initPublications() {
+    const othersData = await loadOthersData();
+    cachedOthersData = othersData;
+
+    try {
+      const [pubData, citeData] = await Promise.all([
         loadJSON(`${DATA_BASE}/publications.json`),
         loadJSON(`${DATA_BASE}/citations.json`),
-        loadJSON(`${DATA_BASE}/others.json`).catch(() => ({ papers: [] })),
       ]);
 
       cachedPubData = pubData;
-      cachedOthersData = othersData;
       cachedCiteDict = normalizeCitations(citeData);
       renderPublications(pubData.first_author || [], "pub-first-author");
       renderPublications(pubData.second_author || [], "pub-second-author");
@@ -1255,6 +1265,7 @@
     } catch (err) {
       console.warn("Using embedded fallback publication data:", err);
       await renderFallbackPublications();
+      renderOtherPublications(othersData);
     }
   }
 
