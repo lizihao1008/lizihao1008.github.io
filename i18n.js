@@ -197,7 +197,7 @@
         secondAuthor: "第二作者",
         otherSelected: "部分其他论文",
         empty: "暂无论文记录。",
-        citations: "{n} 次引用",
+        citations: "引用数 {n}",
         chartFail: "图表库加载失败。",
         totalCites: "总引用：{total} · 最近更新：{date}",
         chartTitle: "第一作者：{first}，第二作者：{second}",
