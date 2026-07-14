@@ -2,7 +2,7 @@ name: Update ADS Data
 
 on:
   schedule:
-    - cron: "0 6 * * *"
+    - cron: "0 6 */3 * *"
   workflow_dispatch:
 
 permissions:
