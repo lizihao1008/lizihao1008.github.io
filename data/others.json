@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T07:17:59.934062+00:00",
+  "updated_at": "2026-08-16T06:29:41.332463+00:00",
   "source": "NASA ADS public library",
   "library_id": "ZuHr_R81QLmYGiJ8B9dfPA",
   "library_url": "https://ui.adsabs.harvard.edu/public-libraries/ZuHr_R81QLmYGiJ8B9dfPA",
@@ -102,7 +102,7 @@
       "bibcode": "2025ApJ...983..186W",
       "doi": "10.3847/1538-4357/adb28a",
       "arxiv_id": "2407.17809",
-      "citation_count": 15
+      "citation_count": 16
     }
   ]
 }
