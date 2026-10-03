@@ -3,12 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Personal academic homepage — Astronomy Ph.D. researcher studying the cosmos.">
-  <title>[Zihao Li] · Astronomy</title>
+  <meta name="description" content="Zihao Li — PhD candidate at the Cosmic Dawn Center (DAWN), Niels Bohr Institute, University of Copenhagen. JWST slitless spectroscopy, galaxy chemical evolution, and the reionization era.">
+  <meta name="author" content="Zihao Li">
+  <title>Zihao Li · Astrophysics</title>
+  <link rel="canonical" href="https://lizihao1008.github.io/">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="Zihao Li · Astrophysics">
+  <meta property="og:description" content="PhD candidate at the Cosmic Dawn Center (DAWN), Niels Bohr Institute. JWST slitless spectroscopy, galaxy chemical evolution, and the reionization era.">
+  <meta property="og:url" content="https://lizihao1008.github.io/">
+  <meta property="og:image" content="https://lizihao1008.github.io/assets/photo.jpg">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Zihao Li",
+    "alternateName": "黎子豪",
+    "url": "https://lizihao1008.github.io/",
+    "image": "https://lizihao1008.github.io/assets/photo.jpg",
+    "email": "mailto:zihao.li@nbi.ku.dk",
+    "jobTitle": "PhD Candidate in Astrophysics",
+    "affiliation": {
+      "@type": "Organization",
+      "name": "Cosmic Dawn Center (DAWN), Niels Bohr Institute, University of Copenhagen"
+    },
+    "alumniOf": [
+      { "@type": "CollegeOrUniversity", "name": "Tsinghua University" },
+      { "@type": "CollegeOrUniversity", "name": "Sichuan University" }
+    ],
+    "knowsAbout": ["Galaxy evolution", "Chemical enrichment", "JWST slitless spectroscopy", "Epoch of reionization"],
+    "sameAs": [
+      "https://orcid.org/0000-0001-5951-459X",
+      "https://scholar.google.com/citations?user=OnQczJEAAAAJ",
+      "https://github.com/lizihao1008"
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20261003">
 </head>
 <body>
   <!-- Background: galaxies + starfield -->
@@ -18,13 +53,12 @@
   <div class="nebula nebula-1" aria-hidden="true"></div>
   <div class="nebula nebula-2" aria-hidden="true"></div>
   <div class="nebula nebula-3" aria-hidden="true"></div>
-  <div class="parallax-layer" id="parallax-dust" aria-hidden="true"></div>
   <div class="cosmic-vignette" aria-hidden="true"></div>
 
   <!-- Navigation -->
   <header class="site-header" id="site-header">
     <nav class="nav" data-i18n-attr="aria-label:nav.menu">
-      <a href="#home" class="nav-logo" data-scroll>✦</a>
+      <a href="#home" class="nav-logo" data-scroll>Zihao Li</a>
       <ul class="nav-links" id="nav-links">
         <li><a href="#home" data-scroll data-i18n="nav.home">Home</a></li>
         <li><a href="#about" data-scroll data-i18n="nav.about">About</a></li>
@@ -51,38 +85,14 @@
   <main>
     <!-- Hero -->
     <section id="home" class="section hero">
-      <div class="hero-orbit" aria-hidden="true">
-        <svg viewBox="0 0 400 400" class="orbit-svg">
-          <defs>
-            <linearGradient id="orbitGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#7aa2ff" stop-opacity="0"/>
-              <stop offset="50%" stop-color="#d8b76a" stop-opacity="0.6"/>
-              <stop offset="100%" stop-color="#b388ff" stop-opacity="0"/>
-            </linearGradient>
-            <radialGradient id="planetGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#fff6e2" stop-opacity="1"/>
-              <stop offset="35%" stop-color="#f0d28c" stop-opacity="0.9"/>
-              <stop offset="100%" stop-color="#d8b76a" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-          <ellipse cx="200" cy="200" rx="180" ry="60" fill="none" stroke="url(#orbitGrad)" stroke-width="0.5" opacity="0.4"/>
-          <ellipse cx="200" cy="200" rx="120" ry="150" fill="none" stroke="url(#orbitGrad)" stroke-width="0.4" opacity="0.22" transform="rotate(28 200 200)"/>
-          <circle r="4" fill="url(#planetGlow)">
-            <animateMotion dur="18s" repeatCount="indefinite" rotate="auto"
-              path="M 20,200 a 180,60 0 1,0 360,0 a 180,60 0 1,0 -360,0"/>
-          </circle>
-        </svg>
-      </div>
       <div class="container hero-content">
-        <p class="hero-tagline fade-in" style="--delay: 0.1s" data-i18n="hero.tagline">「Your silence is that of a star」</p>
-        <h1 class="hero-title fade-in" style="--delay: 0.25s">Zihao Li</h1>
-        <p class="hero-subtitle fade-in" style="--delay: 0.4s" data-i18n="hero.subtitle">Astronomer · Observer of the Cosmos</p>
-        <p class="hero-desc fade-in" style="--delay: 0.55s">
-          <span data-i18n="hero.desc">I study the origin, structure, and evolution of the Universe.</span><br>
-        </p>
-        <div class="hero-actions fade-in" style="--delay: 0.7s">
+        <h1 class="hero-title fade-in" style="--delay: 0.1s">Zihao Li</h1>
+        <p class="hero-subtitle fade-in" style="--delay: 0.25s" data-i18n="hero.subtitle">PhD Candidate in Astrophysics</p>
+        <p class="hero-affiliation fade-in" style="--delay: 0.3s" data-i18n="hero.affiliation">Cosmic Dawn Center (DAWN) · Niels Bohr Institute · University of Copenhagen</p>
+        <p class="hero-desc fade-in" style="--delay: 0.45s" data-i18n="hero.desc">I use JWST slitless spectroscopy to study how galaxies build up their metals — from cosmic noon to the epoch of reionization.</p>
+        <div class="hero-actions fade-in" style="--delay: 0.6s">
           <a href="#research" class="btn btn-primary" data-scroll data-i18n="hero.viewResearch">View Research</a>
-          <a href="assets/CV.pdf" class="btn btn-secondary" download data-i18n="hero.downloadCv">Download CV</a>
+          <a href="assets/CV.pdf" class="btn btn-secondary" target="_blank" rel="noopener" data-i18n="hero.downloadCv">CV (PDF)</a>
         </div>
       </div>
       <a href="#about" class="scroll-hint" data-i18n-attr="aria-label:nav.scrollDown" data-scroll>
@@ -99,14 +109,8 @@
         </header>
         <div class="about-grid">
           <div class="about-text">
-            <p class="lead" data-i18n="about.lead">
-                I'm currently a PhD student at Cosmic DAWN Center, Niels Bohr Institute, University of Copenhagen. I'm actively engaged in data reduction for JWST NIRCam/NIRISS WFSS. At Cosmic DAWN Center, I'm working with Lise Christensen and Koki Kakichi, focusing on COSMOS-3D survey.     
-                I received my Master degree at Department of Astronomy, Tsinghua University, advised by Prof. Zheng Cai. 
-                Prior to that, I earned my Bachelor's degree with honors in Aerospace Engineering from the School of Aeronautics and Astronautics at Sichuan University.
-            </p>
-            <p data-i18n="about.p2">
-                I started looking into the sky since I can remember and ever since then, the starry sky has become an indispensible part of my life. I am deeply indebted to everyone who has supported me in my academic career.
-            </p>
+            <p class="lead" data-i18n="about.lead">I am a PhD candidate at the Cosmic Dawn Center (DAWN), Niels Bohr Institute, University of Copenhagen, working with Lise Christensen and Koki Kakiichi. I study the chemical enrichment of galaxies across cosmic time — from metallicity gradients at cosmic noon to metal-poor galaxies and possible first-star signatures near the end of reionization.</p>
+            <p data-i18n="about.p2">At DAWN, I work on the data reduction of JWST NIRCam and NIRISS wide-field slitless spectroscopy (WFSS) for the COSMOS-3D survey, and analyse JWST ASPIRE and EIGER spectroscopy of galaxies at z ≈ 5–7. I received my M.Sc. in Astronomy from Tsinghua University, advised by Zheng Cai, and my B.Sc. with honors in Aerospace Engineering from Sichuan University.</p>
           </div>
           <div class="about-sidebar">
             <figure class="about-photo-frame glass-card">
@@ -115,8 +119,8 @@
                   src="assets/photo.jpg"
                   alt="Portrait of Zihao Li"
                   data-i18n-attr="alt:about.photoAlt"
-                  width="360"
-                  height="240"
+                  width="1440"
+                  height="960"
                   loading="lazy"
                 />
               </div>
@@ -125,19 +129,19 @@
             <dl>
               <div>
                 <dt data-i18n="about.name">Name</dt>
-                <dd data-i18n="about.nameVal">黎子豪/ Zihao Li</dd>
+                <dd data-i18n="about.nameVal">Zihao Li (黎子豪)</dd>
               </div>
               <div>
-                <dt data-i18n="about.role">Title</dt>
-                <dd data-i18n="about.roleVal">Ph.D. student in Astronomy </dd>
+                <dt data-i18n="about.role">Position</dt>
+                <dd data-i18n="about.roleVal">PhD Candidate in Astrophysics</dd>
               </div>
               <div>
                 <dt data-i18n="about.affiliation">Affiliation</dt>
-                <dd data-i18n="about.affiliationVal">Niels Bohr Institute, University of Copenhagen</dd>
+                <dd data-i18n="about.affiliationVal">Cosmic Dawn Center (DAWN), Niels Bohr Institute, University of Copenhagen</dd>
               </div>
               <div>
                 <dt data-i18n="about.research">Research</dt>
-                <dd data-i18n="about.researchVal">Galaxy formation · High-z galaxies · Reionization · Cosmic Web</dd>
+                <dd data-i18n="about.researchVal">Galaxy chemical evolution · Metallicity gradients · Reionization-era galaxies · JWST slitless spectroscopy</dd>
               </div>
             </dl>
             </aside>
@@ -156,23 +160,35 @@
         <div class="research-grid">
           <article class="research-card glass-card">
             <span class="card-icon" aria-hidden="true">◎</span>
-            <h3 data-i18n="research.c1Title">Galaxy Formation and Evolution</h3>
-            <p data-i18n="research.c1Desc">How galaxies form, grow, and transform across cosmic time — from primordial seeds to mature stellar systems.</p>
+            <h3 data-i18n="research.c1Title">Metallicity Gradients Across Cosmic Time</h3>
+            <p data-i18n="research.c1Desc">Spatially resolved gas-phase metallicity from grism spectroscopy, tracing how galaxies assemble from the local Universe to z ≈ 9.</p>
+            <p class="research-refs"><span data-i18n="research.keyPapers">Key papers</span>:
+              <a href="https://ui.adsabs.harvard.edu/abs/2025ApJS..280...62L" target="_blank" rel="noopener noreferrer">Li et al. 2025, ApJS</a>
+            </p>
           </article>
           <article class="research-card glass-card">
             <span class="card-icon" aria-hidden="true">✧</span>
-            <h3 data-i18n="research.c2Title">High-redshift Universe</h3>
-            <p data-i18n="research.c2Desc">Distant galaxies and the first structures in the early Universe, where light still carries the echo of genesis.</p>
+            <h3 data-i18n="research.c2Title">Metal Enrichment in the Reionization Era</h3>
+            <p data-i18n="research.c2Desc">JWST ASPIRE/EIGER spectroscopy combined with chemical evolution models to study metal enrichment, environmental effects, and possible first-star (Pop III) imprints at z ≈ 5–7.</p>
+            <p class="research-refs"><span data-i18n="research.keyPapers">Key papers</span>:
+              <a href="https://ui.adsabs.harvard.edu/abs/2025A%26A...703A.106L" target="_blank" rel="noopener noreferrer">Li et al. 2025, A&amp;A</a>; <a href="https://ui.adsabs.harvard.edu/abs/2026arXiv260631638L" target="_blank" rel="noopener noreferrer">Li et al. 2026, arXiv</a>
+            </p>
           </article>
           <article class="research-card glass-card">
             <span class="card-icon" aria-hidden="true">◈</span>
-            <h3 data-i18n="research.c3Title">Cosmological Simulations</h3>
-            <p data-i18n="research.c3Desc">Numerical models of dark matter, gas, and galaxies — tracing the invisible architecture that shapes what we observe.</p>
+            <h3 data-i18n="research.c3Title">JWST Wide-Field Slitless Spectroscopy</h3>
+            <p data-i18n="research.c3Desc">Data reduction and analysis of JWST NIRCam/NIRISS WFSS for the COSMOS-3D survey, including spatially resolved kinematics of a lensed z = 8.34 disk candidate.</p>
+            <p class="research-refs"><span data-i18n="research.keyPapers">Key papers</span>:
+              <a href="https://ui.adsabs.harvard.edu/abs/2023arXiv231009327L" target="_blank" rel="noopener noreferrer">Li et al. 2023, arXiv</a>
+            </p>
           </article>
           <article class="research-card glass-card">
             <span class="card-icon" aria-hidden="true">◇</span>
-            <h3 data-i18n="research.c4Title">Observational Astronomy</h3>
-            <p data-i18n="research.c4Desc">Telescope data, spectroscopy, imaging, and multi-wavelength analysis to confront theory with the sky.</p>
+            <h3 data-i18n="research.c4Title">Galaxies in Overdense Environments and the IGM</h3>
+            <p data-i18n="research.c4Desc">How protocluster environments shape galaxy chemistry at cosmic noon, and mapping the intergalactic medium with Lyα forest tomography.</p>
+            <p class="research-refs"><span data-i18n="research.keyPapers">Key papers</span>:
+              <a href="https://ui.adsabs.harvard.edu/abs/2022ApJ...929L...8L" target="_blank" rel="noopener noreferrer">Li et al. 2022, ApJL</a>; <a href="https://ui.adsabs.harvard.edu/abs/2022ApJ...926...70W" target="_blank" rel="noopener noreferrer">Wang et al. 2022, ApJ</a>; <a href="https://ui.adsabs.harvard.edu/abs/2021ApJ...916...20L" target="_blank" rel="noopener noreferrer">Li et al. 2021, ApJ</a>
+            </p>
           </article>
         </div>
       </div>
@@ -299,14 +315,15 @@
               </div>
               <div>
                 <dt data-i18n="contact.institution">Institution</dt>
-                <dd data-i18n="contact.institutionVal">Niels Bohr Institute, University of Copenhagen</dd>
+                <dd data-i18n="contact.institutionVal">Cosmic Dawn Center (DAWN), Niels Bohr Institute, University of Copenhagen</dd>
               </div>
               <div>
                 <dt data-i18n="contact.office">Office</dt>
-                <dd data-i18n="contact.officeVal">Second floor, NBB</dd>
+                <dd data-i18n="contact.officeVal">02.2.I.112, Niels Bohr Building, Jagtvej 155A, DK-2200 Copenhagen N, Denmark</dd>
               </div>
             </dl>
             <ul class="contact-links">
+              <li><a href="https://ui.adsabs.harvard.edu/search/q=orcid%3A0000-0001-5951-459X&sort=date%20desc" target="_blank" rel="noopener noreferrer">NASA ADS</a></li>
               <li><a href="https://scholar.google.com/citations?user=OnQczJEAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">Google Scholar</a></li>
               <li><a href="https://orcid.org/0000-0001-5951-459X" target="_blank" rel="noopener noreferrer">ORCID</a></li>
               <li><a href="https://github.com/lizihao1008" target="_blank" rel="noopener noreferrer">GitHub</a></li>
@@ -340,9 +357,8 @@
     </div>
   </div>
 
-  <script type="text/javascript" id="mapmyvisitors" src="https://mapmyvisitors.com/map.js?cl=ffffff&w=300&t=tt&d=khZ-_Jyi1In_cRFGFzk2S1XSX0HnKqG9S5GJYSQDdzI&co=000000"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.2/dist/apexcharts.min.js"></script>
-  <script src="i18n.js"></script>
-  <script src="script.js"></script>
+  <script src="i18n.js?v=20261003"></script>
+  <script src="script.js?v=20261003"></script>
 </body>
 </html>

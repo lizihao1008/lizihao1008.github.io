@@ -10,9 +10,9 @@
   const I18N = {
     en: {
       meta: {
-        title: "Zihao Li · Astronomy",
+        title: "Zihao Li · Astrophysics",
         description:
-          "Personal academic homepage — Astronomy Ph.D. researcher studying the cosmos.",
+          "Zihao Li — PhD candidate at the Cosmic Dawn Center (DAWN), Niels Bohr Institute, University of Copenhagen. JWST slitless spectroscopy, galaxy chemical evolution, and the reionization era.",
       },
       lang: { toZh: "中文", toEn: "EN" },
       nav: {
@@ -29,45 +29,48 @@
         contact: "Contact",
       },
       hero: {
-        tagline: "「Your silence is that of a star」",
-        subtitle: "Astronomer · Observer of the Cosmos",
-        desc: "I study the origin, structure, and evolution of the Universe.",
+        subtitle: "PhD Candidate in Astrophysics",
+        affiliation:
+          "Cosmic Dawn Center (DAWN) · Niels Bohr Institute · University of Copenhagen",
+        desc: "I use JWST slitless spectroscopy to study how galaxies build up their metals — from cosmic noon to the epoch of reionization.",
         viewResearch: "View Research",
-        downloadCv: "Download CV",
+        downloadCv: "CV (PDF)",
       },
       about: {
         label: "About",
         title: "About Me",
         lead:
-          "I'm currently a PhD student at Cosmic DAWN Center, Niels Bohr Institute, University of Copenhagen. I'm actively engaged in data reduction for JWST NIRCam/NIRISS WFSS. At Cosmic DAWN Center, I'm working with Lise Christensen and Koki Kakichi, focusing on COSMOS-3D survey. At Copenhagen, I study the first generation of stars and the reionization of the Universe. I received my Master degree at Department of Astronomy, Tsinghua University, advised by Prof. Zheng Cai. Prior to that, I earned my Bachelor's degree with honors in Aerospace Engineering from the School of Aeronautics and Astronautics at Sichuan University.",
+          "I am a PhD candidate at the Cosmic Dawn Center (DAWN), Niels Bohr Institute, University of Copenhagen, working with Lise Christensen and Koki Kakiichi. I study the chemical enrichment of galaxies across cosmic time — from metallicity gradients at cosmic noon to metal-poor galaxies and possible first-star signatures near the end of reionization.",
         p2:
-          "Since my earliest memories, I have looked up at the stars. Along the path of academic pursuit, I have been blessed with the support of many people, to whom I am deeply grateful.",
+          "At DAWN, I work on the data reduction of JWST NIRCam and NIRISS wide-field slitless spectroscopy (WFSS) for the COSMOS-3D survey, and analyse JWST ASPIRE and EIGER spectroscopy of galaxies at z ≈ 5–7. I received my M.Sc. in Astronomy from Tsinghua University, advised by Zheng Cai, and my B.Sc. with honors in Aerospace Engineering from Sichuan University.",
         photoAlt: "Portrait of Zihao Li",
         name: "Name",
-        nameVal: "黎子豪 / Zihao Li",
-        role: "Title",
-        roleVal: "Ph.D. student in Astronomy",
+        nameVal: "Zihao Li (黎子豪)",
+        role: "Position",
+        roleVal: "PhD Candidate in Astrophysics",
         affiliation: "Affiliation",
-        affiliationVal: "Niels Bohr Institute, University of Copenhagen",
+        affiliationVal:
+          "Cosmic Dawn Center (DAWN), Niels Bohr Institute, University of Copenhagen",
         research: "Research",
         researchVal:
-          "Galaxy formation · High-z galaxies · Reionization · Cosmic Web",
+          "Galaxy chemical evolution · Metallicity gradients · Reionization-era galaxies · JWST slitless spectroscopy",
       },
       research: {
         label: "Research",
         title: "Research Interests",
-        c1Title: "Galaxy Formation and Evolution",
+        keyPapers: "Key papers",
+        c1Title: "Metallicity Gradients Across Cosmic Time",
         c1Desc:
-          "How galaxies form, grow, and transform across cosmic time.",
-        c2Title: "High-redshift Universe",
+          "Spatially resolved gas-phase metallicity from grism spectroscopy, tracing how galaxies assemble from the local Universe to z ≈ 9.",
+        c2Title: "Metal Enrichment in the Reionization Era",
         c2Desc:
-          "Distant galaxies and the first structures in the early Universe.",
-        c3Title: "Cosmological Simulations",
+          "JWST ASPIRE/EIGER spectroscopy combined with chemical evolution models to study metal enrichment, environmental effects, and possible first-star (Pop III) imprints at z ≈ 5–7.",
+        c3Title: "JWST Wide-Field Slitless Spectroscopy",
         c3Desc:
-          "Numerical models of dark matter, gas, and galaxies.",
-        c4Title: "Observational Astronomy",
+          "Data reduction and analysis of JWST NIRCam/NIRISS WFSS for the COSMOS-3D survey, including spatially resolved kinematics of a lensed z = 8.34 disk candidate.",
+        c4Title: "Galaxies in Overdense Environments and the IGM",
         c4Desc:
-          "Telescope data, spectroscopy, imaging, and multi-wavelength analysis.",
+          "How protocluster environments shape galaxy chemistry at cosmic noon, and mapping the intergalactic medium with Lyα forest tomography.",
       },
       pub: {
         label: "Publications",
@@ -118,9 +121,11 @@
         title: "Contact",
         email: "Email",
         institution: "Institution",
-        institutionVal: "Niels Bohr Institute, University of Copenhagen",
+        institutionVal:
+          "Cosmic Dawn Center (DAWN), Niels Bohr Institute, University of Copenhagen",
         office: "Office",
-        officeVal: "02.2.I.112, Niels Bohr Building, Copenhagen N",
+        officeVal:
+          "02.2.I.112, Niels Bohr Building, Jagtvej 155A, DK-2200 Copenhagen N, Denmark",
         quote:
           "For collaborations, conversations, or questions, feel free to reach out.",
       },
@@ -128,8 +133,9 @@
     },
     zh: {
       meta: {
-        title: "黎子豪",
-        description: "个人学术主页",
+        title: "黎子豪 · 天体物理",
+        description:
+          "黎子豪，哥本哈根大学尼尔斯·玻尔研究所宇宙黎明中心（DAWN）博士候选人。研究方向：JWST 无缝光谱、星系化学演化与宇宙再电离时期。",
       },
       lang: { toZh: "中文", toEn: "EN" },
       nav: {
@@ -146,43 +152,45 @@
         contact: "联系",
       },
       hero: {
-        tagline: "「你的沉默，是星的沉默」",
-        subtitle: "天文学家",
-        desc: "我研究宇宙的起源、结构与演化。",
+        subtitle: "天体物理博士候选人",
+        affiliation: "宇宙黎明中心（DAWN）· 尼尔斯·玻尔研究所 · 哥本哈根大学",
+        desc: "我利用 JWST 无缝光谱研究星系如何积累金属——从宇宙正午一直追溯到宇宙再电离时期。",
         viewResearch: "研究方向",
-        downloadCv: "下载简历",
+        downloadCv: "简历（PDF）",
       },
       about: {
         label: "关于",
         title: "自我介绍",
         lead:
-          "我目前在哥本哈根大玻尔研究所攻读天文学博士，从事空间望远镜数据处理与科学分析。在哥本哈根大学，我师从Lise Christensen 和 Koki Kakichi。我主要参与 COSMOS-3D 无缝光谱巡天，重点研究方向是第一代恒星，宇宙再电离等问题。我曾在清华大学天文系攻读硕士学位，导师为蔡峥教授；此前毕业于四川大学航空航天工程系，获工学学士学位（吴玉章学院荣誉学士学位）。",
-        // p2:
-        //   "余自有识以来，恒仰观星汉；学术求索之途，幸承诸君襄助。前者寄余神思，后者成余所学。",
-        photoAlt: "照片",
+          "我目前是哥本哈根大学尼尔斯·玻尔研究所宇宙黎明中心（DAWN）的博士候选人，合作导师为 Lise Christensen 和 Koki Kakiichi。我的研究聚焦于星系在宇宙历史中的化学增丰——从宇宙正午时期的金属丰度梯度，到再电离末期的贫金属星系及可能的第一代恒星（Pop III）印记。",
+        p2:
+          "在 DAWN，我参与 COSMOS-3D 巡天中 JWST NIRCam 与 NIRISS 宽视场无缝光谱（WFSS）的数据处理，并分析 JWST ASPIRE 与 EIGER 项目中 z ≈ 5–7 星系的光谱数据。此前，我在清华大学天文系获得硕士学位，导师为蔡峥教授；本科毕业于四川大学空天科学与工程学院航空航天工程专业，获荣誉学士学位。",
+        photoAlt: "黎子豪的照片",
         name: "姓名",
-        nameVal: "黎子豪 / Zihao Li",
+        nameVal: "黎子豪（Zihao Li）",
         role: "职位",
-        roleVal: "天文学博士生",
+        roleVal: "天体物理博士候选人",
         affiliation: "单位",
-        affiliationVal: "哥本哈根大学·玻尔研究所",
+        affiliationVal: "哥本哈根大学 尼尔斯·玻尔研究所 宇宙黎明中心（DAWN）",
         research: "研究方向",
-        researchVal: "星系形成 · 高红移星系 · 再电离 · 宇宙大尺度结构",
+        researchVal: "星系化学演化 · 金属丰度梯度 · 再电离时期星系 · JWST 无缝光谱",
       },
       research: {
         label: "研究",
         title: "研究兴趣",
-        c1Title: "星系形成与演化",
+        keyPapers: "代表论文",
+        c1Title: "金属丰度梯度的宇宙演化",
         c1Desc:
-          "星系如何在宇宙中诞生、成长与死亡。",
-        c2Title: "高红移宇宙",
+          "利用无缝光谱测量星系空间分辨的气相金属丰度，追踪星系从近邻宇宙到 z ≈ 9 的组装历史。",
+        c2Title: "再电离时期的金属增丰",
         c2Desc:
-          "早期宇宙中的首批结构，例如重子物质与暗物质的分布等。",
-        c3Title: "宇宙学模拟",
+          "结合 JWST ASPIRE/EIGER 光谱与化学演化模型，研究 z ≈ 5–7 星系的金属增丰、环境效应以及可能的第一代恒星（Pop III）印记。",
+        c3Title: "JWST 宽视场无缝光谱",
         c3Desc:
-          "暗物质、气体与星系的解析或数值模型。",
-        c4Title: "观测天文学",
-        c4Desc: "望远镜数据、光谱、成像与多波段分析等。",
+          "COSMOS-3D 巡天中 JWST NIRCam/NIRISS WFSS 的数据处理与分析，包括对一个 z = 8.34 引力透镜盘星系候选体的空间分辨动力学研究。",
+        c4Title: "高密度环境中的星系与星系际介质",
+        c4Desc:
+          "研究原星系团环境如何影响宇宙正午时期星系的化学性质，并利用 Lyα 森林层析成像重建星系际介质的三维分布。",
       },
       pub: {
         label: "论文",
@@ -232,9 +240,10 @@
         title: "联系方式",
         email: "邮箱",
         institution: "机构",
-        institutionVal: "哥本哈根大学·玻尔研究所",
+        institutionVal: "哥本哈根大学 尼尔斯·玻尔研究所 宇宙黎明中心（DAWN）",
         office: "办公室",
-        officeVal: "02.2.I.112, Niels Bohr Building, Copenhagen N",
+        officeVal:
+          "02.2.I.112, Niels Bohr Building, Jagtvej 155A, DK-2200 Copenhagen N, Denmark",
         quote: "欢迎合作交流。",
       },
       footer: { rights: "版权所有。" },
