@@ -42,7 +42,7 @@
         lead:
           "I am a PhD candidate at the Cosmic Dawn Center (DAWN), Niels Bohr Institute, University of Copenhagen, working with Lise Christensen and Koki Kakiichi. I study the chemical enrichment of galaxies across cosmic time — from metallicity gradients at cosmic noon to metal-poor galaxies and possible first-star signatures near the end of reionization.",
         p2:
-          "At DAWN, I work on the data reduction of JWST NIRCam and NIRISS wide-field slitless spectroscopy (WFSS) for the COSMOS-3D survey, and analyse JWST ASPIRE and EIGER spectroscopy of galaxies at z ≈ 5–7. I received my M.Sc. in Astronomy from Tsinghua University, advised by Zheng Cai, and my B.Sc. with honors in Aerospace Engineering from Sichuan University.",
+          "At DAWN, I work on the data reduction of JWST NIRCam and NIRISS wide-field slitless spectroscopy (WFSS) for the COSMOS-3D survey, and analyse JWST spectroscopy of galaxies at z ≈ 5–7. I received my M.Sc. in Astronomy from Tsinghua University, advised by Zheng Cai, and my B.Sc. with honors in Aerospace Engineering from Sichuan University.",
         photoAlt: "Portrait of Zihao Li",
         name: "Name",
         nameVal: "Zihao Li (黎子豪)",
@@ -64,7 +64,7 @@
           "Spatially resolved gas-phase metallicity from grism spectroscopy, tracing how galaxies assemble from the local Universe to z ≈ 9.",
         c2Title: "Metal Enrichment in the Reionization Era",
         c2Desc:
-          "JWST ASPIRE/EIGER spectroscopy combined with chemical evolution models to study metal enrichment, environmental effects, and possible first-star (Pop III) imprints at z ≈ 5–7.",
+          "JWST spectroscopy combined with chemical evolution models to study metal enrichment, environmental effects, and possible first-star (Pop III) imprints at z ≈ 5–7.",
         c3Title: "JWST Wide-Field Slitless Spectroscopy",
         c3Desc:
           "Data reduction and analysis of JWST NIRCam/NIRISS WFSS for the COSMOS-3D survey, including spatially resolved kinematics of a lensed z = 8.34 disk candidate.",
@@ -164,8 +164,8 @@
         lead:
           "我目前是哥本哈根大学尼尔斯·玻尔研究所宇宙黎明中心（DAWN）的博士候选人，合作导师为 Lise Christensen 和 Koki Kakiichi。我的研究聚焦于星系在宇宙历史中的化学增丰——从宇宙正午时期的金属丰度梯度，到再电离末期的贫金属星系及可能的第一代恒星（Pop III）印记。",
         p2:
-          "在 DAWN，我参与 COSMOS-3D 巡天中 JWST NIRCam 与 NIRISS 宽视场无缝光谱（WFSS）的数据处理，并分析 JWST ASPIRE 与 EIGER 项目中 z ≈ 5–7 星系的光谱数据。此前，我在清华大学天文系获得硕士学位，导师为蔡峥教授；本科毕业于四川大学空天科学与工程学院航空航天工程专业，获荣誉学士学位。",
-        photoAlt: "黎子豪的照片",
+          "在 DAWN，我参与 COSMOS-3D 巡天中 JWST NIRCam 与 NIRISS 宽视场无缝光谱（WFSS）的数据处理，以此研究高红移星系的金属增丰，宇宙再电离等问题。此前，我在清华大学天文系获得硕士学位，导师为蔡峥教授；本科毕业于四川大学空天科学与工程学院航空航天工程专业，获吴玉章学院荣誉学士学位。",
+        photoAlt: "照片",
         name: "姓名",
         nameVal: "黎子豪（Zihao Li）",
         role: "职位",
@@ -184,7 +184,7 @@
           "利用无缝光谱测量星系空间分辨的气相金属丰度，追踪星系从近邻宇宙到 z ≈ 9 的组装历史。",
         c2Title: "再电离时期的金属增丰",
         c2Desc:
-          "结合 JWST ASPIRE/EIGER 光谱与化学演化模型，研究 z ≈ 5–7 星系的金属增丰、环境效应以及可能的第一代恒星（Pop III）印记。",
+          "结合 JWST光谱与化学演化模型，研究 z ≈ 5–7 星系的金属增丰、环境效应以及可能的第一代恒星（Pop III）印记。",
         c3Title: "JWST 宽视场无缝光谱",
         c3Desc:
           "COSMOS-3D 巡天中 JWST NIRCam/NIRISS WFSS 的数据处理与分析，包括对一个 z = 8.34 引力透镜盘星系候选体的空间分辨动力学研究。",
