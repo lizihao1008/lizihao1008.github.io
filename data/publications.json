@@ -1,7 +1,45 @@
 {
-  "updated_at": "2026-10-04T11:39:53.373655+00:00",
+  "updated_at": "2026-10-07T12:29:14.531812+00:00",
   "source": "NASA ADS",
   "first_author": [
+    {
+      "title": "First-star imprints in a metal-poor galaxy overdensity near the end of reionization",
+      "authors": [
+        "Li, Zihao",
+        "Kakiichi, Koki",
+        "Christensen, Lise",
+        "Cai, Zheng",
+        "D'Odorico, Valentina",
+        "Matthee, Jorryt",
+        "Kashino, Daichi",
+        "Bordoloi, Rongmon",
+        "Mackenzie, Ruari",
+        "Berg, Trystyn A. M.",
+        "Vanni, Irene",
+        "Salvadori, Stefania",
+        "Venditti, Alessandra",
+        "Zhang, Shiwu",
+        "Bosman, Sarah E. I.",
+        "Bañados, Eduardo",
+        "Davies, Frederick B.",
+        "Fan, Xiaohui",
+        "Jun, Hyunsung D.",
+        "Jin, Xiangyu",
+        "Li, Mingyu",
+        "Rojas-Ruiz, Sofía",
+        "Wang, Feige",
+        "Yang, Jinyi",
+        "Zou, Siwei",
+        "Zhang, Huanian",
+        "Zhu, Yongda"
+      ],
+      "year": "2026",
+      "journal": "Nature Astronomy",
+      "bibcode": "2026NatAs.tmp..219L",
+      "doi": "10.1038/s41550-026-02993-5",
+      "arxiv_id": null,
+      "citation_count": 0
+    },
     {
       "title": "First-star imprints in a metal-poor galaxy overdensity near the end of reionization",
       "authors": [
