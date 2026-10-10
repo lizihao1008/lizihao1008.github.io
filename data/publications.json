@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-07T12:29:14.531812+00:00",
+  "updated_at": "2026-10-10T11:44:45.438968+00:00",
   "source": "NASA ADS",
   "first_author": [
     {
@@ -76,7 +76,7 @@
       "bibcode": "2026arXiv260631638L",
       "doi": "10.48550/arXiv.2606.31638",
       "arxiv_id": "2606.31638",
-      "citation_count": 0
+      "citation_count": 1
     },
     {
       "title": "Insights on metal enrichment and environmental effects at z ≈ 5─7 with JWST ASPIRE/EIGER and the chemical evolution model",
@@ -105,7 +105,7 @@
       "bibcode": "2025A&A...703A.106L",
       "doi": "10.1051/0004-6361/202555372",
       "arxiv_id": "2504.18616",
-      "citation_count": 18
+      "citation_count": 19
     },
     {
       "title": "A 13 Billion Year View of Galaxy Growth: Metallicity Gradient Evolution from the Local Universe to z = 9 with JWST and Archival Surveys",
