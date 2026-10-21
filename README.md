@@ -6,7 +6,7 @@
 astronomy-homepage/
 ├── index.html          # 主页面
 ├── style.css           # 样式与动画
-├── script.js           # 交互、星空、论文数据加载
+├── script.js           # 交互、论文数据加载
 ├── config/
 │   └── ads_config.json # ADS API 作者查询配置
 ├── data/
@@ -81,7 +81,7 @@ python scripts/ads_metrics.py
 ## 技术说明
 
 - 纯 HTML / CSS / 原生 JavaScript，无框架
-- Canvas 星空、星云渐变、流星、视差
+- 彩墨（宣纸 + 矿物色）风格：首屏星系、星云、北斗为静态 SVG（`assets/ink-*.svg`），由 `python scripts/gen_ink_art.py assets` 生成
 - Publications 通过静态 JSON 展示（避免浏览器直接调用 ADS API 的 CORS 与 token 暴露问题）
 - 响应式布局，支持移动端导航
 

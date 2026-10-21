@@ -1,6 +1,6 @@
 /**
  * Astronomy Academic Homepage
- * Starfield, navigation, scroll reveal, ADS publications
+ * Navigation, scroll reveal, ADS publications
  */
 
 (function () {
@@ -15,663 +15,9 @@
 
   const dateLocale = () => (SiteI18n?.getLang() === "zh" ? "zh-CN" : "en-US");
 
-  /** Galaxies + nebulae belong to the hero; 1 at the top, 0 once scrolled past. */
-  let heroFade = 1;
-
   let cachedPubData = null;
   let cachedOthersData = null;
   let cachedCiteDict = null;
-
-  // ─── Galaxy field (sprite-baked, GPU-blitted) ───────────────────
-  // Each galaxy is a rigid body that only rotates, so we rasterize its
-  // thousands of particles ONCE into an offscreen sprite, then per-frame
-  // simply rotate + drawImage it. This turns ~30k arc() calls per frame
-  // into ~3 drawImage() calls — orders of magnitude faster.
-  function initGalaxyField() {
-    const canvas = document.getElementById("galaxy-field");
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    let width, height, minDim, animationId;
-    let lastWidth = 0;
-    let lastHeight = 0;
-    let galaxies = [];
-    let flowStreams = [];
-    let flowSprite = null; // baked, blurred gas-cloud sprite (no hard edges)
-    let flowSpriteX = 0; // local offset of sprite top-left from galaxy centre
-    let flowSpriteY = 0;
-    let animStart = performance.now();
-
-    /** Slow gas motion (not freeze) when OS "reduce motion" is on. */
-    function flowSpeedScale() {
-      return prefersReducedMotion() ? 0.4 : 1;
-    }
-
-    /** Decorative spin — keep visible even when OS "reduce motion" is on (slower only). */
-    function galaxyRotSpeed(configSpeed) {
-      const base = configSpeed ?? 0.1;
-      return prefersReducedMotion() ? base * 0.45 : base;
-    }
-
-    /** Box–Muller standard normal sample */
-    function gaussianRandom() {
-      let u, v, s;
-      do {
-        u = Math.random() * 2 - 1;
-        v = Math.random() * 2 - 1;
-        s = u * u + v * v;
-      } while (s >= 1 || s === 0);
-      return u * Math.sqrt((-2 * Math.log(s)) / s);
-    }
-
-    /** 2D Gaussian halo: dense small light points instead of ellipse gradient */
-    function buildGaussianBulge(radius, flatten, count, sigmaScale) {
-      const sigmaX = radius * sigmaScale;
-      const sigmaY = sigmaX * flatten;
-      const inv2sx2 = 1 / (2 * sigmaX * sigmaX);
-      const inv2sy2 = 1 / (2 * sigmaY * sigmaY);
-      const particles = [];
-
-      for (let i = 0; i < count; i++) {
-        const gx = gaussianRandom() * sigmaX;
-        const gy = gaussianRandom() * sigmaY;
-        const gaussW = Math.exp(-gx * gx * inv2sx2 - gy * gy * inv2sy2);
-        const rNorm = Math.sqrt(gx * gx + gy * gy) / (radius * 0.55);
-
-        const r = Math.hypot(gx, gy / flatten);
-        const angle = Math.atan2(gy / flatten, gx);
-        particles.push({
-          kind: "bulge",
-          baseR: r,
-          angle,
-          size: 0.2 + gaussW * 1.6 + Math.random() * 0.25,
-          opacity: 0.25 + gaussW * 0.7,
-          hue: rNorm < 0.12 ? "core" : rNorm < 0.32 ? "gold" : rNorm < 0.55 ? "warm" : "purple",
-        });
-      }
-      return particles;
-    }
-
-    function buildArmParticles(config, radius) {
-      const particles = [];
-      const armCount = config.arms || 6;
-      const tightness = config.tightness || 0.62;
-      const armWidth = ((Math.PI * 2) / armCount) * (config.armWidth ?? 0.17);
-      const highlightArm = config.highlightArm ?? 0;
-
-      for (let i = 0; i < config.count; i++) {
-        const arm = i % armCount;
-        const armAngle = (arm / armCount) * Math.PI * 2;
-        const dist = Math.pow(Math.random(), 0.58);
-        const r = radius * (0.1 + dist * 0.9);
-        const armJitter = (arm - highlightArm) * 0.035;
-        const spin = Math.log(1 + dist * 14) * tightness * 3.4 + armJitter;
-        const angle = armAngle + spin + (Math.random() - 0.5) * armWidth;
-        const isHighlight = arm === highlightArm;
-        const isBeacon = isHighlight && dist > 0.4 && dist < 0.8 && Math.random() < 0.02;
-
-        particles.push({
-          kind: "arm",
-          baseR: r,
-          angle,
-          size: (isBeacon ? 2.4 : 1) * (0.35 + Math.random() * (dist < 0.3 ? 1.5 : 0.75)),
-          opacity: (isHighlight ? 1.2 : 1) * (0.1 + (1 - dist) * 0.4 + Math.random() * 0.1),
-          hue: isBeacon ? "core" : dist < 0.2 ? "gold" : dist < 0.5 ? "purple" : "blue",
-        });
-      }
-      return particles;
-    }
-
-    function buildGalaxy(config) {
-      const cx = config.cx * width;
-      const cy = config.cy * height;
-      const radius = config.radius * minDim;
-      const flatten = config.flatten || 0.72;
-      const bulgeCount = Math.floor((config.bulgeCount ?? 280) * (width < 768 ? 0.55 : 1));
-      const coreCount = Math.floor((config.coreCount ?? 80) * (width < 768 ? 0.55 : 1));
-
-      const bulge = buildGaussianBulge(radius, flatten, bulgeCount, config.bulgeSigma ?? 0.38);
-      const core = buildGaussianBulge(radius * 0.35, flatten, coreCount, 0.55);
-      const arms = buildArmParticles(config, radius);
-      const nucleus = [];
-      const nOff = config.nucleusOffset ?? 0.2;
-      for (let i = 0; i < 10; i++) {
-        const lx = radius * nOff + gaussianRandom() * radius * 0.035;
-        const ly = gaussianRandom() * radius * 0.035;
-        nucleus.push({
-          kind: "nucleus",
-          baseR: Math.hypot(lx, ly / flatten),
-          angle: Math.atan2(ly / flatten, lx),
-          size: 1.4 + Math.random() * 0.8,
-          opacity: 0.7 + Math.random() * 0.2,
-          hue: "core",
-        });
-      }
-
-      const haloScale = config.haloScale ?? 0.96;
-      return {
-        cx,
-        cy,
-        radius,
-        flatten,
-        haloRx: radius * haloScale,
-        haloRy: radius * flatten * haloScale,
-        rotationOffset: config.rotationOffset ?? Math.random() * Math.PI * 2,
-        rotSpeed: galaxyRotSpeed(config.rotSpeed),
-        nucleusOffset: config.nucleusOffset ?? 0.2,
-        particles: [...bulge, ...core, ...arms, ...nucleus],
-      };
-    }
-
-    function resize() {
-      const nextW = window.innerWidth;
-      const nextH = window.innerHeight;
-      if (nextW === lastWidth && nextH === lastHeight) return;
-      lastWidth = nextW;
-      lastHeight = nextH;
-
-      width = nextW;
-      height = nextH;
-      canvas.width = Math.round(nextW * dpr);
-      canvas.height = Math.round(nextH * dpr);
-      canvas.style.width = nextW + "px";
-      canvas.style.height = nextH + "px";
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      minDim = Math.min(width, height);
-      animStart = performance.now();
-
-      const density = width < 768 ? 0.55 : 1;
-      const bulgeScale = width < 768 ? 0.55 : 0.72;
-      galaxies = [
-        buildGalaxy({
-          cx: 0.78,
-          cy: 0.22,
-          radius: 0.15,
-          count: Math.floor(2000 * density),
-          arms: 6,
-          armWidth: 0.4,
-          bulgeCount: Math.floor(2000 * bulgeScale),
-          coreCount: Math.floor(1000 * bulgeScale),
-          rotSpeed: -0.2,
-          tightness: 0.64,
-          flatten: 0.6,
-        }),
-        buildGalaxy({
-          cx: 0.18,
-          cy: 0.72,
-          radius: 0.22,
-          count: Math.floor(2000 * density),
-          arms: 6,
-          armWidth: 0.2,
-          bulgeCount: Math.floor(1500 * bulgeScale),
-          coreCount: Math.floor(1000 * bulgeScale),
-          rotSpeed: -0.06,
-          tightness: 0.65,
-          flatten: 0.75,
-        }),
-        buildGalaxy({
-          cx: 0.85,
-          cy: 0.6,
-          radius: 0.12,
-          count: Math.floor(1000 * density),
-          arms: 4,
-          armWidth: 0.25,
-          bulgeCount: Math.floor(500 * bulgeScale),
-          coreCount: Math.floor(200 * bulgeScale),
-          rotSpeed: -0.16,
-          tightness: 0.8,
-          flatten: 0.4,
-        }),
-      ];
-
-      // Rasterize each galaxy once; the animation loop only blits + rotates.
-      galaxies.forEach(bakeGalaxySprite);
-
-      // Circumgalactic gas flows around the bottom-left galaxy.
-      if (galaxies[1]) buildFlows(galaxies[1]);
-    }
-
-    const colors = {
-      core: [255, 248, 220],
-      warm: [255, 220, 160],
-      gold: [255, 210, 130],
-      purple: [200, 160, 255],
-      blue: [122, 162, 255],
-    };
-
-    /** (r, θ) on a flattened disk → local cartesian (sprite-centred). */
-    function diskToLocal(r, angle, flatten) {
-      return { x: r * Math.cos(angle), y: r * Math.sin(angle) * flatten };
-    }
-
-    /**
-     * Bake a galaxy's halo + bloom + every particle into an offscreen
-     * sprite ONCE. Particles are composited additively ("lighter") so
-     * dense regions glow — the luminous, nebulous core comes for free.
-     */
-    function bakeGalaxySprite(g) {
-      const half = g.radius * 1.4 + 16; // local radius incl. glow margin
-      const size = Math.ceil(half * 2);
-      const off = document.createElement("canvas");
-      off.width = Math.max(1, Math.round(size * dpr));
-      off.height = Math.max(1, Math.round(size * dpr));
-      const octx = off.getContext("2d");
-      octx.scale(dpr, dpr);
-      octx.translate(half, half);
-
-      // 1. Soft elliptical halo (blue-violet glow aligned with the disk)
-      const rx = g.haloRx;
-      const ry = g.haloRy;
-      if (rx > 0 && ry > 0) {
-        octx.save();
-        octx.scale(1, ry / rx);
-        const halo = octx.createRadialGradient(0, 0, 0, 0, 0, rx);
-        halo.addColorStop(0, "rgba(70, 96, 220, 0.42)");
-        halo.addColorStop(0.35, "rgba(48, 64, 168, 0.26)");
-        halo.addColorStop(0.65, "rgba(28, 36, 86, 0.12)");
-        halo.addColorStop(0.88, "rgba(8, 12, 30, 0.04)");
-        halo.addColorStop(1, "rgba(8, 12, 30, 0)");
-        octx.fillStyle = halo;
-        octx.beginPath();
-        octx.arc(0, 0, rx, 0, Math.PI * 2);
-        octx.fill();
-        octx.restore();
-      }
-
-      // 2. Warm central bloom — gives the bulge a glowing heart
-      octx.globalCompositeOperation = "lighter";
-      const bloomR = g.radius * 0.78;
-      const bloom = octx.createRadialGradient(0, 0, 0, 0, 0, bloomR);
-      bloom.addColorStop(0, "rgba(255, 240, 208, 0.45)");
-      bloom.addColorStop(0.3, "rgba(255, 214, 150, 0.18)");
-      bloom.addColorStop(0.7, "rgba(216, 150, 90, 0.05)");
-      bloom.addColorStop(1, "rgba(216, 150, 90, 0)");
-      octx.fillStyle = bloom;
-      octx.beginPath();
-      octx.arc(0, 0, bloomR, 0, Math.PI * 2);
-      octx.fill();
-
-      // 3. All particles, additively blended (bulge → arms → nucleus)
-      const order = { bulge: 0.85, arm: 1, nucleus: 1 };
-      ["bulge", "arm", "nucleus"].forEach((kind) => {
-        const alphaMul = order[kind];
-        for (const p of g.particles) {
-          if (p.kind !== kind) continue;
-          const { x, y } = diskToLocal(p.baseR, p.angle, g.flatten);
-          const a = Math.min(1, p.opacity * alphaMul);
-          const [r, gg, b] = colors[p.hue] || colors.gold;
-          octx.beginPath();
-          octx.arc(x, y, p.size, 0, Math.PI * 2);
-          octx.fillStyle = `rgba(${r}, ${gg}, ${b}, ${a})`;
-          octx.fill();
-        }
-      });
-      octx.globalCompositeOperation = "source-over";
-
-      g.sprite = off;
-      g.spriteHalf = half;
-    }
-
-    // ─── Circumgalactic gas flows (accretion / outflow / recycling) ──
-    const flowColors = {
-      accrete: [150, 205, 255], // light blue — inflowing gas
-      outflow: [255, 96, 120], // red — bipolar outflow
-      recycle: [255, 120, 150], // pink-red — recycled gas
-    };
-
-    /** Cubic Bézier point at t. */
-    function bezier(p0, p1, p2, p3, t) {
-      const mt = 1 - t;
-      const a = mt * mt * mt;
-      const b = 3 * mt * mt * t;
-      const c = 3 * mt * t * t;
-      const d = t * t * t;
-      return {
-        x: a * p0.x + b * p1.x + c * p2.x + d * p3.x,
-        y: a * p0.y + b * p1.y + c * p2.y + d * p3.y,
-      };
-    }
-
-    /** Fade particles in/out near the ends of their stream for continuity. */
-    function edgeFade(u) {
-      return Math.max(0, Math.min(1, u / 0.16, (1 - u) / 0.16));
-    }
-
-    /**
-     * Build flow streams around a galaxy, in local px (relative to its
-     * centre). Shapes follow the canonical CGM diagram: blue accretion
-     * spirals in, red outflows shoot out bipolar, red fountains recycle.
-     */
-    function buildFlows(g) {
-      const R = g.radius;
-      const S = (x, y) => ({ x: x * R, y: y * R });
-
-      // Width/alpha profiles along a stream (t: 0 = at galaxy → 1 = far end)
-      const taperMid = (t) => 0.35 + 0.65 * Math.sin(Math.PI * t); // wispy both ends
-      const widenOut = (t) => 0.45 + 1.75 * t; // thin at base, thick far out
-      const fadeOut = (t) => 1 - 0.62 * t; // dimmer with distance
-      const one = () => 1;
-
-      // A cubic-Bézier path helper returning a local(t) function.
-      const bezPath = (a, b, c, d) => {
-        const p0 = S(a[0], a[1]);
-        const p1 = S(b[0], b[1]);
-        const p2 = S(c[0], c[1]);
-        const p3 = S(d[0], d[1]);
-        return (t) => bezier(p0, p1, p2, p3, t);
-      };
-
-      const make = (type, local, baseWidth, widthFn, alphaFn, count, speed) => ({
-        type,
-        local,
-        baseWidth: baseWidth * R,
-        widthFn,
-        alphaFn,
-        particles: Array.from({ length: count }, () => ({
-          o: Math.random(),
-          s: speed * (0.75 + Math.random() * 0.5),
-          size: 0.7 + Math.random() * 1.5,
-          maxA: 0.4 + Math.random() * 0.35,
-        })),
-      });
-
-      // ── Accretion: ONE light-blue stream spiralling in from the right ──
-      // t=0 far out (upper-right) → t=1 at the galaxy, winding ~0.6 turn.
-      const rOut = 1.95, rIn = 0.4, th0 = -0.5, sweep = Math.PI * 1.25;
-      const spiral = (t) => {
-        const rr = (rIn + (rOut - rIn) * Math.pow(1 - t, 1.3)) * R;
-        const th = th0 + sweep * t;
-        return { x: rr * Math.cos(th), y: rr * Math.sin(th) * 0.82 };
-      };
-
-      flowStreams = [
-        make("accrete", spiral, 0.24, (t) => 0.4 + 0.6 * Math.sin(Math.PI * Math.min(t * 1.05, 1)), one, 30, 0.06),
-
-        // ── Outflow: one thick plume up, one down — widen + fade outward ──
-        make("outflow", bezPath([0.0, -0.12], [0.06, -0.7], [-0.06, -1.3], [0.05, -1.95]), 0.3, widenOut, fadeOut, 26, 0.1),
-        make("outflow", bezPath([-0.02, 0.12], [-0.08, 0.7], [0.05, 1.3], [-0.04, 1.95]), 0.3, widenOut, fadeOut, 26, 0.1),
-
-        // ── Recycling: red fountains that arc out and fall back in ──
-        make("recycle", bezPath([-0.05, -0.06], [-1.15, -1.0], [-1.5, -0.05], [-0.45, 0.2]), 0.24, taperMid, one, 20, 0.062),
-        make("recycle", bezPath([0.08, -0.1], [1.05, -1.35], [1.6, -0.35], [0.45, 0.04]), 0.22, taperMid, one, 20, 0.06),
-      ];
-
-      bakeFlowSprite(g);
-    }
-
-    /**
-     * Bake all gas ribbons into ONE blurred offscreen sprite. The cloud is
-     * built from overlapping soft radial blobs along each Bézier, then a
-     * Gaussian blur is applied — so the gas has no hard edges at all.
-     * Only the moving particles are drawn live on top.
-     */
-    function bakeFlowSprite(g) {
-      if (!flowStreams.length) return;
-
-      // Bounding box from sampled curve points + gas half-width margin.
-      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-      let maxW = 0;
-      flowStreams.forEach((s) => {
-        for (let t = 0; t <= 1.0001; t += 0.05) {
-          const pt = s.local(t);
-          const w = s.baseWidth * s.widthFn(t);
-          if (w > maxW) maxW = w;
-          if (pt.x - w < minX) minX = pt.x - w;
-          if (pt.x + w > maxX) maxX = pt.x + w;
-          if (pt.y - w < minY) minY = pt.y - w;
-          if (pt.y + w > maxY) maxY = pt.y + w;
-        }
-      });
-      const blurPx = Math.max(8, g.radius * 0.06);
-      const margin = maxW * 0.8 + blurPx * 2.5;
-      minX -= margin; minY -= margin; maxX += margin; maxY += margin;
-
-      flowSpriteX = minX;
-      flowSpriteY = minY;
-      const w = Math.ceil(maxX - minX);
-      const h = Math.ceil(maxY - minY);
-
-      const off = document.createElement("canvas");
-      off.width = Math.max(1, Math.round(w * dpr));
-      off.height = Math.max(1, Math.round(h * dpr));
-      const octx = off.getContext("2d");
-      octx.scale(dpr, dpr);
-      octx.translate(-minX, -minY); // galaxy centre → local origin
-      octx.filter = `blur(${blurPx}px)`;
-
-      flowStreams.forEach((s) => {
-        const [r, gg, b] = flowColors[s.type];
-        const steps = 34;
-        for (let i = 0; i <= steps; i++) {
-          const t = i / steps;
-          const pt = s.local(t);
-          const rad = Math.max(1, s.baseWidth * s.widthFn(t));
-          const am = s.alphaFn(t); // alpha multiplier along the stream
-          const grad = octx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, rad);
-          grad.addColorStop(0, `rgba(${r}, ${gg}, ${b}, ${0.06 * am})`);
-          grad.addColorStop(0.6, `rgba(${r}, ${gg}, ${b}, ${0.025 * am})`);
-          grad.addColorStop(1, `rgba(${r}, ${gg}, ${b}, 0)`);
-          octx.fillStyle = grad;
-          octx.beginPath();
-          octx.arc(pt.x, pt.y, rad, 0, Math.PI * 2);
-          octx.fill();
-        }
-      });
-      octx.filter = "none";
-
-      flowSprite = off;
-    }
-
-    function drawFlows(g, elapsed) {
-      if (!flowStreams.length) return;
-      const gx = g.cx;
-      const gy = g.cy;
-      const speed = flowSpeedScale();
-
-      // 1. Blurred, edgeless gas cloud (baked once) blitted around galaxy.
-      if (flowSprite) {
-        ctx.drawImage(
-          flowSprite,
-          gx + flowSpriteX,
-          gy + flowSpriteY,
-          flowSprite.width / dpr,
-          flowSprite.height / dpr
-        );
-      }
-
-      // 2. Live flowing particles, additively blended for a soft glow.
-      ctx.save();
-      ctx.globalCompositeOperation = "lighter";
-      flowStreams.forEach((stream) => {
-        const [r, gg, b] = flowColors[stream.type];
-
-        stream.particles.forEach((p) => {
-          const u = (p.o + elapsed * p.s * speed) % 1;
-          const local = stream.local(u);
-          const x = local.x + gx;
-          const y = local.y + gy;
-          const a = edgeFade(u) * p.maxA * stream.alphaFn(u);
-          if (a <= 0.01) return;
-          // Clumps grow with the plume; soft-edged radial gradient, no rim.
-          const sz = p.size * (0.7 + 0.5 * stream.widthFn(u)) * 2.2;
-          const grad = ctx.createRadialGradient(x, y, 0, x, y, sz);
-          grad.addColorStop(0, `rgba(${r}, ${gg}, ${b}, ${a})`);
-          grad.addColorStop(1, `rgba(${r}, ${gg}, ${b}, 0)`);
-          ctx.fillStyle = grad;
-          ctx.beginPath();
-          ctx.arc(x, y, sz, 0, Math.PI * 2);
-          ctx.fill();
-        });
-      });
-      ctx.restore();
-    }
-
-    function draw(now) {
-      ctx.clearRect(0, 0, width, height);
-      const elapsed = (now - animStart) / 1000;
-
-      // Canvas is fully faded out below the hero — skip the blits.
-      if (heroFade <= 0) {
-        animationId = requestAnimationFrame(draw);
-        return;
-      }
-
-      // Gas flows render behind the galaxy disk so it stays crisp on top.
-      if (galaxies[1] && galaxies[1].sprite) {
-        drawFlows(galaxies[1], elapsed);
-      }
-
-      galaxies.forEach((g) => {
-        if (!g.sprite) return;
-        const rotation = g.rotationOffset + elapsed * g.rotSpeed;
-        const px = g.cx;
-        const py = g.cy;
-        const d = g.spriteHalf * 2;
-        ctx.save();
-        ctx.translate(px, py);
-        ctx.rotate(rotation);
-        ctx.drawImage(g.sprite, -g.spriteHalf, -g.spriteHalf, d, d);
-        ctx.restore();
-      });
-
-      animationId = requestAnimationFrame(draw);
-    }
-
-    function startLoop() {
-      cancelAnimationFrame(animationId);
-      animStart = performance.now();
-      animationId = requestAnimationFrame(draw);
-    }
-
-    resize();
-    window.addEventListener("resize", resize);
-    startLoop();
-    motionQuery.addEventListener("change", () => {
-      resize();
-      startLoop();
-    });
-
-    return () => cancelAnimationFrame(animationId);
-  }
-
-  // ─── Starfield Canvas ───────────────────────────────────────────
-  function initStarfield() {
-    const canvas = document.getElementById("starfield");
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    let stars = [];
-    let width, height, animationId;
-    let starAnimStart = performance.now();
-
-    function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      const mobile = width < 768;
-      const reduced = prefersReducedMotion();
-      const count = Math.floor(((width * height) / 1800) * (mobile ? 0.85 : 1));
-
-      stars = Array.from({ length: count }, () => {
-        const roll = Math.random();
-        const depth = Math.random();
-
-        // ~6% strong twinklers, ~30% medium, rest subtle background
-        let baseR, minAlpha, maxAlpha, twinkleSpeed, glow, warm;
-
-        if (roll < 0.06) {
-          baseR = 1.2 + Math.random() * 1.4;
-          minAlpha = reduced ? 0.25 : 0.08;
-          maxAlpha = 1;
-          twinkleSpeed = (0.6 + Math.random() * 0.8) * (reduced ? 0.5 : 1);
-          glow = true;
-          warm = Math.random() < 0.35;
-        } else if (roll < 0.36) {
-          baseR = 0.5 + depth * 1.1;
-          minAlpha = reduced ? 0.2 : 0.12;
-          maxAlpha = 0.55 + Math.random() * 0.4;
-          twinkleSpeed = (0.5 + Math.random() * 0.6) * (reduced ? 0.5 : 1);
-          glow = false;
-          warm = Math.random() < 0.18;
-        } else {
-          baseR = 0.2 + depth * 0.75;
-          minAlpha = 0.15 + depth * 0.2;
-          maxAlpha = 0.35 + depth * 0.25;
-          twinkleSpeed = (0.6 + Math.random() * 0.8) * (reduced ? 0.5 : 1);
-          glow = false;
-          warm = false;
-        }
-
-        return {
-          x: Math.random() * width,
-          y: Math.random() * height,
-          baseR,
-          minAlpha,
-          maxAlpha,
-          phase: Math.random() * Math.PI * 2,
-          twinkleSpeed,
-          glow,
-          warm,
-        };
-      });
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, width, height);
-      const elapsed = (performance.now() - starAnimStart) / 1000;
-
-      stars.forEach((s) => {
-        const wave = 0.5 + 0.5 * Math.sin(elapsed * s.twinkleSpeed + s.phase);
-        const alpha = s.minAlpha + (s.maxAlpha - s.minAlpha) * wave;
-        const radius = s.baseR * (0.75 + 0.25 * wave);
-        const [cr, cg, cb] = s.warm ? [255, 235, 190] : [245, 247, 255];
-
-        ctx.save();
-        if (s.glow && alpha > 0.45) {
-          ctx.shadowBlur = 4 + 10 * wave;
-          ctx.shadowColor = `rgba(255, 245, 220, ${alpha * 0.85})`;
-        }
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${alpha})`;
-        ctx.fill();
-        ctx.restore();
-      });
-
-      animationId = requestAnimationFrame(draw);
-    }
-
-    function startStarLoop() {
-      cancelAnimationFrame(animationId);
-      starAnimStart = performance.now();
-      animationId = requestAnimationFrame(draw);
-    }
-
-    resize();
-    window.addEventListener("resize", resize);
-    startStarLoop();
-
-    motionQuery.addEventListener("change", () => {
-      resize();
-      startStarLoop();
-    });
-
-    return () => cancelAnimationFrame(animationId);
-  }
-
-  // ─── Hero backdrop fade ─────────────────────────────────────────
-  function initHeroFade() {
-    const root = document.documentElement;
-
-    function update() {
-      heroFade = Math.max(0, 1 - window.scrollY / (window.innerHeight * 0.8));
-      root.style.setProperty("--hero-fade", heroFade.toFixed(3));
-    }
-
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    update();
-  }
 
   // ─── Header scroll state ────────────────────────────────────────
   function initHeader() {
@@ -891,8 +237,12 @@
       SiteI18n?.getLang() === "zh"
         ? '"Helvetica Neue", Helvetica, "PingFang SC", "Microsoft YaHei", sans-serif'
         : "Inter, sans-serif";
-    const labelColor = "#aeb7d8";
-    const whiteLabels = years.map(() => "#f5f7ff");
+    const css = getComputedStyle(document.documentElement);
+    const token = (name) => css.getPropertyValue(name).trim();
+    const inkColor = token("--ink");
+    const labelColor = token("--ink-muted");
+    const lineColor = token("--line");
+    const yearLabels = years.map(() => inkColor);
 
     const options = {
       title: {
@@ -902,7 +252,7 @@
         style: {
           fontSize: "14px",
           fontWeight: "bold",
-          color: "#f5f7ff",
+          color: inkColor,
           fontFamily: chartFont,
         },
       },
@@ -920,7 +270,7 @@
         zoom: { enabled: false },
         fontFamily: chartFont,
       },
-      colors: ["#d8b76a", "#7aa2ff"],
+      colors: [token("--azurite"), token("--ochre")],
       responsive: [
         {
           breakpoint: 640,
@@ -933,7 +283,7 @@
       plotOptions: {
         bar: {
           horizontal: false,
-          borderRadius: 8,
+          borderRadius: 2,
           borderRadiusApplication: "end",
           dataLabels: {
             total: {
@@ -941,7 +291,7 @@
               style: {
                 fontSize: "12px",
                 fontWeight: 700,
-                color: "#f5f7ff",
+                color: inkColor,
               },
             },
           },
@@ -953,10 +303,10 @@
       xaxis: {
         categories: years,
         labels: {
-          style: { fontSize: "12px", colors: whiteLabels },
+          style: { fontSize: "12px", colors: yearLabels },
         },
-        axisBorder: { color: "rgba(255,255,255,0.12)" },
-        axisTicks: { color: "rgba(255,255,255,0.12)" },
+        axisBorder: { color: lineColor },
+        axisTicks: { color: lineColor },
       },
       yaxis: {
         labels: {
@@ -964,22 +314,22 @@
         },
         title: {
           text: t("pub.chartYaxis"),
-          style: { color: "#f5f7ff", fontSize: "12px", fontWeight: 600 },
+          style: { color: inkColor, fontSize: "12px", fontWeight: 600 },
         },
       },
       grid: {
-        borderColor: "rgba(255,255,255,0.08)",
+        borderColor: lineColor,
         strokeDashArray: 4,
       },
       legend: {
         position: "right",
         offsetY: 40,
-        labels: { colors: "#f5f7ff" },
+        labels: { colors: inkColor },
         markers: { radius: 12 },
       },
-      fill: { opacity: 0.92 },
+      fill: { opacity: 0.85 },
       tooltip: { enabled: false },
-      theme: { mode: "dark" },
+      theme: { mode: "light" },
     };
 
     if (citationsChart) {
@@ -1163,9 +513,6 @@
   // ─── Init ───────────────────────────────────────────────────────
   document.addEventListener("DOMContentLoaded", () => {
     if (typeof SiteI18n !== "undefined") SiteI18n.initI18n();
-    initHeroFade();
-    initGalaxyField();
-    initStarfield();
     initHeader();
     initNavigation();
     initReveal();
