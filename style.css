@@ -27,7 +27,6 @@
 
   --font-serif: "Cormorant Garamond", "Noto Serif SC", Georgia, serif;
   --font-sans: "Inter", "Source Sans Pro", system-ui, sans-serif;
-  --font-brush: "Ma Shan Zheng", "STKaiti", "KaiTi", serif;
   --container: min(1100px, 92vw);
   --header-h: 4rem;
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -101,22 +100,6 @@ body {
   position: relative;
   margin-bottom: 3.25rem;
   text-align: center;
-}
-
-/* Large brush character watermark behind each section title */
-.section-header[data-glyph]::before {
-  content: attr(data-glyph);
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -56%);
-  font-family: var(--font-brush);
-  font-size: clamp(6rem, 14vw, 9rem);
-  line-height: 1;
-  color: var(--ink);
-  opacity: 0.06;
-  pointer-events: none;
-  z-index: -1;
 }
 
 .section-label {
