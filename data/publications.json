@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-25T10:32:17.768900+00:00",
+  "updated_at": "2026-10-28T11:57:50.118315+00:00",
   "source": "NASA ADS",
   "first_author": [
     {
@@ -76,7 +76,7 @@
       "bibcode": "2026arXiv260631638L",
       "doi": "10.48550/arXiv.2606.31638",
       "arxiv_id": "2606.31638",
-      "citation_count": 1
+      "citation_count": 2
     },
     {
       "title": "Insights on metal enrichment and environmental effects at z ≈ 5─7 with JWST ASPIRE/EIGER and the chemical evolution model",
@@ -105,7 +105,7 @@
       "bibcode": "2025A&A...703A.106L",
       "doi": "10.1051/0004-6361/202555372",
       "arxiv_id": "2504.18616",
-      "citation_count": 19
+      "citation_count": 24
     },
     {
       "title": "A 13 Billion Year View of Galaxy Growth: Metallicity Gradient Evolution from the Local Universe to z = 9 with JWST and Archival Surveys",
@@ -144,7 +144,7 @@
       "bibcode": "2025ApJS..280...62L",
       "doi": "10.3847/1538-4365/adfa70",
       "arxiv_id": "2506.12129",
-      "citation_count": 25
+      "citation_count": 27
     },
     {
       "title": "MAGNIF: A Tentative Lensed Rotating Disk at $z=8.34$ detected by JWST NIRCam WFSS with Dynamical Forward Modeling",
@@ -219,7 +219,7 @@
       "bibcode": "2022ApJ...929L...8L",
       "doi": "10.3847/2041-8213/ac626f",
       "arxiv_id": "2204.03008",
-      "citation_count": 34
+      "citation_count": 35
     },
     {
       "title": "Improved Lyα Tomography Using Optimized Reconstruction with Constraints on Absorption (ORCA)",
@@ -233,7 +233,7 @@
       "bibcode": "2021ApJ...916...20L",
       "doi": "10.3847/1538-4357/ac044a",
       "arxiv_id": "2102.12306",
-      "citation_count": 8
+      "citation_count": 9
     }
   ],
   "second_author": [
@@ -255,7 +255,7 @@
       "bibcode": "2026MNRAS.550g1235H",
       "doi": "10.1093/mnras/stag1235",
       "arxiv_id": "2605.20810",
-      "citation_count": 3
+      "citation_count": 4
     },
     {
       "title": "The Mass-Metallicity Relation at Cosmic Noon in Overdense Environments: First Results from the MAMMOTH-Grism HST Slitless Spectroscopic Survey",
@@ -278,7 +278,7 @@
       "bibcode": "2022ApJ...926...70W",
       "doi": "10.3847/1538-4357/ac3974",
       "arxiv_id": "2108.06373",
-      "citation_count": 46
+      "citation_count": 49
     }
   ],
   "extra_library_id": "mq516QaIThmD037jiCsULg",
