@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-31T11:33:02.518579+00:00",
+  "updated_at": "2026-11-01T12:30:48.219911+00:00",
   "source": "NASA ADS",
   "first_author": [
     {
@@ -144,7 +144,7 @@
       "bibcode": "2025ApJS..280...62L",
       "doi": "10.3847/1538-4365/adfa70",
       "arxiv_id": "2506.12129",
-      "citation_count": 27
+      "citation_count": 28
     },
     {
       "title": "MAGNIF: A Tentative Lensed Rotating Disk at $z=8.34$ detected by JWST NIRCam WFSS with Dynamical Forward Modeling",
@@ -255,7 +255,7 @@
       "bibcode": "2026MNRAS.550g1235H",
       "doi": "10.1093/mnras/stag1235",
       "arxiv_id": "2605.20810",
-      "citation_count": 4
+      "citation_count": 5
     },
     {
       "title": "The Mass-Metallicity Relation at Cosmic Noon in Overdense Environments: First Results from the MAMMOTH-Grism HST Slitless Spectroscopic Survey",
@@ -278,7 +278,7 @@
       "bibcode": "2022ApJ...926...70W",
       "doi": "10.3847/1538-4357/ac3974",
       "arxiv_id": "2108.06373",
-      "citation_count": 49
+      "citation_count": 50
     }
   ],
   "extra_library_id": "mq516QaIThmD037jiCsULg",

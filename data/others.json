@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-31T11:33:02.518579+00:00",
+  "updated_at": "2026-11-01T12:30:48.219911+00:00",
   "source": "NASA ADS public library",
   "library_id": "ZuHr_R81QLmYGiJ8B9dfPA",
   "library_url": "https://ui.adsabs.harvard.edu/public-libraries/ZuHr_R81QLmYGiJ8B9dfPA",
@@ -53,7 +53,7 @@
       "bibcode": "2026ApJ...997...95Y",
       "doi": "10.3847/1538-4357/ae27cf",
       "arxiv_id": "2511.16154",
-      "citation_count": 8
+      "citation_count": 9
     },
     {
       "title": "Tracing the Evolution of the Cool Gas in CGM and IGM Environments through Mg II Absorption from Redshift z = 0.75 to z = 1.65 Using DESI-Y1 Data",
