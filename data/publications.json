@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-19T15:03:28.757808+00:00",
+  "updated_at": "2026-11-22T13:55:16.576653+00:00",
   "source": "NASA ADS",
   "first_author": [
     {
@@ -67,7 +67,7 @@
       "bibcode": "2025A&A...703A.106L",
       "doi": "10.1051/0004-6361/202555372",
       "arxiv_id": "2504.18616",
-      "citation_count": 26
+      "citation_count": 25
     },
     {
       "title": "A 13 Billion Year View of Galaxy Growth: Metallicity Gradient Evolution from the Local Universe to z = 9 with JWST and Archival Surveys",
@@ -106,7 +106,7 @@
       "bibcode": "2025ApJS..280...62L",
       "doi": "10.3847/1538-4365/adfa70",
       "arxiv_id": "2506.12129",
-      "citation_count": 28
+      "citation_count": 29
     },
     {
       "title": "MAGNIF: A Tentative Lensed Rotating Disk at $z=8.34$ detected by JWST NIRCam WFSS with Dynamical Forward Modeling",
@@ -217,7 +217,7 @@
       "bibcode": "2026MNRAS.550g1235H",
       "doi": "10.1093/mnras/stag1235",
       "arxiv_id": "2605.20810",
-      "citation_count": 5
+      "citation_count": 6
     },
     {
       "title": "The Mass-Metallicity Relation at Cosmic Noon in Overdense Environments: First Results from the MAMMOTH-Grism HST Slitless Spectroscopic Survey",
@@ -240,7 +240,7 @@
       "bibcode": "2022ApJ...926...70W",
       "doi": "10.3847/1538-4357/ac3974",
       "arxiv_id": "2108.06373",
-      "citation_count": 52
+      "citation_count": 53
     }
   ],
   "extra_library_id": "mq516QaIThmD037jiCsULg",
